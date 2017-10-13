@@ -1,0 +1,600 @@
+"""
+Created on Tue Mar 28 10:03:11 2017
+@author: Marcus
+Shorten/Cleaned Version
+This Code is basically the first three steps: 
+Data Extractions and Plot
+Normalization and Plot
+Inturpolation and Plot
+"""
+
+from pylab import * 
+from numpy import *
+from astropy.io import fits
+from PIL import Image
+from numpy import concatenate
+from numpy import interp
+from numpy import set_printoptions
+from numpy import arange 
+from numpy import nan
+import matplotlib.pyplot as plt
+import os
+import matplotlib.ticker as mtick
+from numpy import sqrt
+from numpy import ones
+from numpy import convolve
+import matplotlib.patches as mpatches
+
+#------------------------------------------------------------------------------
+#from Michael's code)
+def badpix(list_name,xmin_indice,xmax_indice,replace_val):
+    for i in range(xmin_indice,xmax_indice):
+        list_name[i]=replace_val
+def smooth(y, box_pts):
+    box = ones(box_pts)/box_pts
+    y_smooth = convolve(y, box, mode='same')
+    return y_smooth
+
+#------------------------------------------------------------------------------
+#Fits files Opening
+#File says that the date obs was 6/14/15 7:15:17
+Data1 = fits.open("../Data/lcn701010_x1dsum.fits")
+#File says that the date obs was 6/14/15 7:47:56
+Data2 = fits.open("../Data/lcn701020_x1dsum.fits")
+#File says that the date obs was 6/14/15 9:12:04
+Data3 = fits.open("../Data/lcn701030_x1dsum.fits")
+"""
+#File says that the date obs was 6/1/14 3:05:15
+Data4 = fits.open('C:/Users/Marcus/Downloads/lcbx01010_x1dsum.fits')
+#File says that the date obs was 6/1/14 3:37:30
+Data5 = fits.open('C:/Users/Marcus/Downloads/lcbx01020_x1dsum.fits')
+#File says that the date obs was 6/1/14 5:01:22
+Data6 = fits.open('C:/Users/Marcus/Downloads/lcbx01030_x1dsum.fits')
+
+#File says that the date obs was 6/12/14 16:19:16
+Data7 = fits.open('C:/Users/Marcus/Downloads/lcbx02010_x1dsum.fits')
+#File says that the date obs was 6/12/14 16:51:31
+Data8 = fits.open('C:/Users/Marcus/Downloads/lcbx02020_x1dsum.fits')
+#File says that the date obs was 6/12/14 18:14:30
+Data9 = fits.open('C:/Users/Marcus/Downloads/lcbx02030_x1dsum.fits')
+
+#File says that the date obs was 6/28/14 11:25:07
+Data10 = fits.open('C:/Users/Marcus/Downloads/lcbx03010_x1dsum.fits')
+#File says that the date obs was 6/28/14 11:57:22
+Data11 = fits.open('C:/Users/Marcus/Downloads/lcbx03020_x1dsum.fits')
+#File says that the date obs was 6/28/14 13:21:29
+Data12 = fits.open('C:/Users/Marcus/Downloads/lcbx03030_x1dsum.fits')
+"""
+#------------------------------------------------------------------------------
+#Data Extraction
+#headNa  = DataN[0].header headNb  = DataN[1].header where N is an int; was removed to save space 
+#Headers are to give one more information and details about what is in the Fits files
+
+TbData1 = Data1[1].data
+Data1.close()
+TbData2 = Data2[1].data
+Data2.close()
+TbData3 = Data3[1].data
+Data3.close()
+"""
+TbData4 = Data4[1].data
+Data4.close()
+TbData5 = Data5[1].data
+Data5.close()
+TbData6 = Data6[1].data
+Data6.close()
+
+TbData7 = Data7[1].data
+Data7.close()
+TbData8 = Data8[1].data
+Data8.close()
+TbData9 = Data9[1].data
+Data9.close()
+
+TbData10 = Data10[1].data
+Data10.close()
+TbData11 = Data11[1].data
+Data11.close()
+TbData12 = Data12[1].data
+Data12.close()
+"""
+#------------------------------------------------------------------------------
+wavelength1=TbData1['wavelength']
+flux1=TbData1['flux']
+error1=TbData1['error']
+#
+wavelength2=TbData2['wavelength']
+flux2=TbData2['flux']
+error2=TbData2['error']
+#
+wavelength3=TbData3['wavelength']
+flux3=TbData3['flux']
+error3=TbData3['error']
+#------------------------------------------------------------------------------
+#1162.9A - 1479.5A
+TWL1=concatenate((wavelength1[1],wavelength1[0]),axis=0)
+TF1=concatenate((flux1[1],flux1[0]),axis=0)
+ER1=concatenate((error1[1],error1[0]),axis=0)
+#892.4A-1208A
+TWL2=concatenate((wavelength2[1],wavelength2[0]),axis=0)
+TF2=concatenate((flux2[1],flux2[0]),axis=0)
+ER2=concatenate((error2[1],error2[0]),axis=0)
+#1374.4A-1763.1A
+TWL3=concatenate((wavelength3[1],wavelength3[0]),axis=0)
+TF3=concatenate((flux3[1],flux3[0]),axis=0)
+ER3=concatenate((error3[1],error3[0]),axis=0)
+#------------------------------------------------------------------------------
+#Test run I need to test this out
+
+badpix(TF1,5180,5405,0)
+TFS1=smooth(TF1,20)
+TFS3=smooth(TF3,20)
+TFS2=smooth(TF2,20)
+
+plt.figure(1)
+plt.title('Epoch 6/14/15 G1')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.plot(TWL1,TFS1)
+
+plt.axvline(x=1210,color='black')
+
+plt.axvline(x=1187,color='red')
+plt.axvline(x=1188,color='red')
+
+plt.axvline(x=1244,color='red')
+plt.axvline(x=1245,color='red')
+
+plt.axvline(x=1373,color='red')
+plt.axvline(x=1375,color='red')
+
+plt.axvline(x=1407,color='red')
+plt.axvline(x=1409,color='red')
+
+plt.axvline(x=1443,color='red')
+plt.axvline(x=1445,color='red')
+
+
+plt.axvline(x=1345,color='green')
+plt.axvline(x=1347,color='green')
+plt.axvline(x=1350,color='green')
+plt.axvline(x=1354,color='green')
+plt.axvline(x=1352,color='green')
+plt.axvline(x=1353,color='green')
+plt.axvline(x=1354,color='green')
+plt.axvline(x=1355,color='green')
+plt.axvline(x=1359,color='green')
+plt.axvline(x=1365,color='green')
+plt.axvline(x=1366,color='green')
+plt.axvline(x=1371,color='green')
+plt.axvline(x=1372,color='green')
+plt.axvline(x=1373,color='green')
+plt.axvline(x=1374,color='green')
+plt.axvline(x=1375,color='green')
+
+plt.axvline(x=1426.5,color='green')
+plt.axvline(x=1427,color='green')
+plt.axvline(x=1430,color='green')
+plt.axvline(x=1434,color='green')
+plt.axvline(x=1436,color='green')
+plt.axvline(x=1437,color='green')
+plt.axvline(x=1438,color='green')
+plt.axvline(x=1440,color='green')
+plt.axvline(x=1441,color='green')
+plt.axvline(x=1444,color='green')
+plt.axvline(x=1450,color='green')
+plt.axvline(x=1454,color='green')
+
+plt.axvline(x=1380,color='black')
+
+plt.axis([1160,1270,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+"""
+plt.figure(2)
+plt.title('Epoch 6/14/15 G3')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.plot(TWL3,TFS3)
+
+plt.axvline(x=1470,color='black')
+
+plt.axvline(x=1407,color='red')
+plt.axvline(x=1409,color='red')
+
+plt.axvline(x=1443,color='red')
+plt.axvline(x=1445,color='red')
+
+plt.axvline(x=1515,color='red')
+plt.axvline(x=1517,color='red')
+
+plt.axvline(x=1604,color='red')
+plt.axvline(x=1606,color='red')
+
+plt.axvline(x=1672,color='red')
+plt.axvline(x=1674,color='red')
+
+plt.axvline(x=1746,color='red')
+plt.axvline(x=1748,color='red')
+
+plt.axvline(x=1426.5,color='green')
+plt.axvline(x=1427,color='green')
+plt.axvline(x=1430,color='green')
+plt.axvline(x=1434,color='green')
+plt.axvline(x=1436,color='green')
+plt.axvline(x=1437,color='green')
+plt.axvline(x=1438,color='green')
+plt.axvline(x=1440,color='green')
+plt.axvline(x=1441,color='green')
+plt.axvline(x=1444,color='green')
+plt.axvline(x=1450,color='green')
+plt.axvline(x=1454,color='green')
+
+plt.axvline(x=1501,color='green')
+plt.axvline(x=1505,color='green')
+plt.axvline(x=1511,color='green')
+plt.axvline(x=1517,color='green')
+plt.axvline(x=1523,color='green')
+plt.axvline(x=1524,color='green')
+plt.axvline(x=1529.5,color='green')
+plt.axvline(x=1532,color='green')
+plt.axvline(x=1533,color='green')
+plt.axvline(x=1534,color='green')
+plt.axvline(x=1535,color='green')
+plt.axvline(x=1536.2,color='green')
+plt.axvline(x=1537,color='green')
+plt.axvline(x=1540.5,color='green')
+plt.axvline(x=1543.5,color='green')
+plt.axvline(x=1545,color='green')
+
+
+plt.axis([1380,1770,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+
+plt.figure(3)
+plt.title('Epoch 6/14/15 G2')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.plot(TWL2,TFS2)
+
+plt.axvline(x=1110,color='red')
+plt.axvline(x=1112,color='red')
+
+plt.axvline(x=1131,color='red')
+plt.axvline(x=1133,color='red')
+
+plt.axvline(x=1172,color='red')
+plt.axvline(x=1174,color='red')
+
+plt.axvline(x=1184,color='red')
+plt.axvline(x=1186,color='red')
+
+plt.axvline(x=1111,color='green')
+plt.axvline(x=1115,color='green')
+plt.axvline(x=1120,color='green')
+plt.axvline(x=1127,color='green')
+plt.axvline(x=1137,color='green')
+
+plt.axvline(x=1160,color='black')
+
+plt.axis([890,1210,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+"""
+#------------------------------------------------------------------------------
+
+"""#Epoch two
+badpix(TF1,5180,5405,0)
+TFS1=smooth(TF1,20)
+TFS3=smooth(TF3,20)
+TFS2=smooth(TF2,20)
+
+plt.figure(1)
+plt.title('Epoch 6/14/15 G1')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.plot(TWL1,TFS1)
+
+plt.axvline(x=1210,color='black')
+
+plt.axvline(x=1238,color='red')
+plt.axvline(x=1240,color='red')
+
+plt.axvline(x=1185,color='red')
+plt.axvline(x=1187,color='red')
+
+plt.axvline(x=1373,color='red')
+plt.axvline(x=1375,color='red')
+
+plt.axvline(x=1407,color='red')
+plt.axvline(x=1409,color='red')
+
+plt.axvline(x=1443,color='red')
+plt.axvline(x=1445,color='red')
+
+
+plt.axvline(x=1345,color='green')
+plt.axvline(x=1347,color='green')
+plt.axvline(x=1350,color='green')
+plt.axvline(x=1354,color='green')
+plt.axvline(x=1352,color='green')
+plt.axvline(x=1353,color='green')
+plt.axvline(x=1354,color='green')
+plt.axvline(x=1355,color='green')
+plt.axvline(x=1359,color='green')
+plt.axvline(x=1365,color='green')
+plt.axvline(x=1366,color='green')
+plt.axvline(x=1371,color='green')
+plt.axvline(x=1372,color='green')
+plt.axvline(x=1373,color='green')
+plt.axvline(x=1374,color='green')
+plt.axvline(x=1375,color='green')
+
+plt.axvline(x=1426.5,color='green')
+plt.axvline(x=1427,color='green')
+plt.axvline(x=1430,color='green')
+plt.axvline(x=1434,color='green')
+plt.axvline(x=1436,color='green')
+plt.axvline(x=1437,color='green')
+plt.axvline(x=1438,color='green')
+plt.axvline(x=1440,color='green')
+plt.axvline(x=1441,color='green')
+plt.axvline(x=1444,color='green')
+plt.axvline(x=1450,color='green')
+plt.axvline(x=1454,color='green')
+
+plt.axvline(x=1380,color='black')
+
+plt.axis([1160,1470,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+
+plt.figure(2)
+plt.title('Epoch 6/14/15 G3')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.plot(TWL3,TFS3)
+
+plt.axvline(x=1470,color='black')
+
+plt.axvline(x=1407,color='red')
+plt.axvline(x=1409,color='red')
+
+plt.axvline(x=1443,color='red')
+plt.axvline(x=1445,color='red')
+
+plt.axvline(x=1515,color='red')
+plt.axvline(x=1517,color='red')
+
+plt.axvline(x=1604,color='red')
+plt.axvline(x=1606,color='red')
+
+plt.axvline(x=1672,color='red')
+plt.axvline(x=1674,color='red')
+
+plt.axvline(x=1746,color='red')
+plt.axvline(x=1748,color='red')
+
+plt.axvline(x=1426.5,color='green')
+plt.axvline(x=1427,color='green')
+plt.axvline(x=1430,color='green')
+plt.axvline(x=1434,color='green')
+plt.axvline(x=1436,color='green')
+plt.axvline(x=1437,color='green')
+plt.axvline(x=1438,color='green')
+plt.axvline(x=1440,color='green')
+plt.axvline(x=1441,color='green')
+plt.axvline(x=1444,color='green')
+plt.axvline(x=1450,color='green')
+plt.axvline(x=1454,color='green')
+
+plt.axvline(x=1501,color='green')
+plt.axvline(x=1505,color='green')
+plt.axvline(x=1511,color='green')
+plt.axvline(x=1517,color='green')
+plt.axvline(x=1523,color='green')
+plt.axvline(x=1524,color='green')
+plt.axvline(x=1529.5,color='green')
+plt.axvline(x=1532,color='green')
+plt.axvline(x=1533,color='green')
+plt.axvline(x=1534,color='green')
+plt.axvline(x=1535,color='green')
+plt.axvline(x=1536.2,color='green')
+plt.axvline(x=1537,color='green')
+plt.axvline(x=1540.5,color='green')
+plt.axvline(x=1543.5,color='green')
+plt.axvline(x=1545,color='green')
+
+
+plt.axis([1380,1770,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+
+plt.figure(3)
+plt.title('Epoch 6/14/15 G2')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.plot(TWL2,TFS2)
+
+plt.axvline(x=1110,color='red')
+plt.axvline(x=1112,color='red')
+
+plt.axvline(x=1131,color='red')
+plt.axvline(x=1133,color='red')
+
+plt.axvline(x=1172,color='red')
+plt.axvline(x=1174,color='red')
+
+plt.axvline(x=1184,color='red')
+plt.axvline(x=1186,color='red')
+
+plt.axvline(x=1111,color='green')
+plt.axvline(x=1115,color='green')
+plt.axvline(x=1120,color='green')
+plt.axvline(x=1127,color='green')
+plt.axvline(x=1137,color='green')
+
+plt.axvline(x=1160,color='black')
+
+plt.axis([890,1210,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+
+"""
+
+#------------------------------------------------------------------------------
+#Interpolation setup for 1 & 2 from Michael's code
+
+#set_printoptions(threshold=nan) #Prints out entire array if you chose to print an array
+"""
+begin=TWL2[0] #Beginning of the first grating
+end=TWL1[-1]#End of the second grating
+array= arange(begin,end,.00997)#This is the array that we are interpolating to.
+
+Iflux2=interp(array,TWL2,TF2,left=0,right=0)#This is the flux interpolation for the first grating, we want zero for the left and right because if a point is outside of the wavelength range we are looking at we do not want to create data.
+Ierror2=interp(array,TWL2,ER2,left=0,right=0)#This is the error interpolation for the first grating
+
+Iflux1=interp(array,TWL1,TF1,left=0,right=0)#This is the flux interpolation for the second grating
+Ierror1=interp(array,TWL1,ER1,left=0,right=0)#This is the error interpolation for the second grating
+
+#------------------------------------------------------------------------------
+#This is Marcus Method to remove 0 from error sample
+TME1=[]
+TME2=[]
+for i in range (0,len(Ierror1)):
+    if Ierror1[i] == 0:
+        TME1.append(1)
+    else:
+        TME1.append(Ierror1[i])
+        
+for i in range (0,len(Ierror2)):
+    if Ierror2[i] == 0:
+        TME2.append(1)
+    else:
+        TME2.append(Ierror2[i])
+print(len(array))
+#------------------------------------------------------------------------------
+#Truncated form Michael's code
+#3/28 2-3?)
+
+output_array=[]    #Empty array to store the new list of flux values. 
+for i in range(0,len(array)):
+    if (Iflux2[i]==0 and Iflux1[i]==0).all(): #if both of the values are zero then return zero
+            output_array.append(0.0)#stores value in array
+    else:      
+            weight=(1/TME2[i])
+            weight2=(1/TME1[i])
+            spec=Iflux2[i]
+            spec2=Iflux1[i]
+            output_array.append((weight*spec+weight2*spec2)/(weight+weight2))
+            
+#------------------------------------------------------------------------------
+badpix(output_array,32323,32550,0)
+PGflux_1and2=output_array
+
+#plt.plot(PGflux_1and2)
+
+#------------------------------------------------------------------------------
+#Interpolation of set 3
+#From Michael's code 
+#4-6-17 2h)
+
+begin2=TWL2[0]#Beginning of the first grating
+end2=TWL3[-1]#End of the *THIRD* grating
+arrayn= arange(begin2,end2,.0122408)#This is the array that we are interpolating to.NEW STEP SIZE, NEW ARRAY NAME.
+
+Iflux3=interp(arrayn,TWL3,TF3,left=0,right=0)#This is the flux interpolation for the THIRD grating
+Ierror3=interp(arrayn,TWL3,ER3,left=0,right=0)#This is the error interpolation for the THIRD grating
+
+PGflux_1and2n=interp(arrayn,array,PGflux_1and2,left=0,right=0)
+
+
+#------------------------------------------------------------------------------
+#combining error sets for 1 and 2
+Cerror1and2=[]
+for i in range(len(array)):
+    if (Ierror2[i]==0 and Ierror1[i]!=0).all():#If the error value for the first grating is zero dont weight the corresponding flux value
+        Cerror1and2.append(Ierror1[i])
+    elif (Ierror1[i]==0 and Ierror2[i]!=0).all():#If the error value for the first grating is zero dont weight the corresponding flux value
+        Cerror1and2.append(Ierror2[i])
+    elif (Ierror1[i]==0 and Ierror2[i]==0).all():#if both error values are zero then dont weight the flux values
+        Cerror1and2.append(0.0)            
+    else:#if neither of the error values are zero then take the weighted average of the flux values.
+        Cerror1and2.append(sqrt((Ierror1[i])**2+(Ierror2[i])**2))#stores value in array   
+ICerror1and2=interp(arrayn,array,Cerror1and2,left=0,right=0)
+
+#------------------------------------------------------------------------------
+#remove 0 from error
+
+TME1and2=[]
+TME3=[]
+
+for i in range (0,len(ICerror1and2)):
+    if ICerror1and2[i] == 0:
+        TME1and2.append(1)
+    else:
+        TME1and2.append(ICerror1and2[i])
+ 
+for i in range (0,len(Ierror3)):
+    if Ierror3[i] == 0:
+        TME3.append(1)
+    else:
+        TME3.append(Ierror3[i])
+
+#------------------------------------------------------------------------------
+#1h
+TFS=[]
+for i in range(0,len(arrayn)):
+    if (PGflux_1and2n[i]==0 and Iflux3[i]==0).all(): #if both of the values are zero then return zero
+            TFS.append(0.0)#stores value in array
+    else:      
+            weight=(1/TME1and2[i])
+            weight2=(1/TME3[i])
+            spec=PGflux_1and2n[i]
+            spec2=Iflux3[i]
+            TFS.append((weight*spec+weight2*spec2)/(weight+weight2))
+            
+TFSC=smooth(TFS,20)        
+TFS1=smooth(TF1,20)   
+TFS2=smooth(TF2,20) 
+badpix(TFS1,5180,5405,0)
+        
+plt.figure(1)
+plt.title('Epoch 6/14/15')
+plt.xlabel('Wavelength')
+plt.ylabel('Flux')
+plt.plot(TWL1,TFS1)
+plt.plot(TWL2,TFS2)
+plt.plot(arrayn,TFSC)
+plt.axis([1160,1210,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+
+plt.figure(2)
+plt.title('Epoch 6/14/15')
+plt.xlabel('Wavelength')
+plt.ylabel('Flux')
+plt.plot(TWL1,TFS1)
+plt.axis([1160,1260,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+
+plt.figure(3)
+plt.title('Epoch 6/14/15')
+plt.xlabel('Wavelength')
+plt.ylabel('Flux')
+plt.plot(TWL1,TFS1)
+plt.axis([1260,1360,0,15*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+
+plt.figure(4)
+plt.title('Epoch 6/14/15')
+plt.xlabel('Wavelength')
+plt.ylabel('Flux')
+plt.plot(TWL1,TFS1)
+plt.axis([1360,1460,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+"""
