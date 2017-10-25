@@ -143,16 +143,12 @@ head12b  = Data12[1].header
 TbData12 = Data12[1].data
 Data12.close()
 #------------------------------------------------------------------------------
-
 #Printing Headers to learn more about file
 
-#print(head12a)
 """
 print(head11a)
 print(head12a)
-"""
-#print(head2a)
-"""
+
 print(head11b)
 print(head12b)
 """
@@ -264,13 +260,9 @@ TWL12=concatenate((wavelength12[1],wavelength12[0]),axis=0)
 TF12=concatenate((flux12[1],flux12[0]),axis=0)
 #------------------------------------------------------------------------------
 
-#print(TWL10)
-#print(TWL11)
-#print(TWL12)
-
-"""
 #AN Should be fixing this- (scaling plots)
 #Graph Epoch One (Pre Norm)
+"""
 #------------------------------------------------------------------------------
 plt.figure(1)
 plt.title('Epoch 6/14/15')

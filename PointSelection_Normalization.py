@@ -35,6 +35,18 @@ def smooth(y, box_pts):
     y_smooth = convolve(y, box, mode='same')
     return y_smooth
 
+
+
+def find_index(your_list,your_value):#this finds the INDEX of the element of the list CLOSEST to what you put in.
+    x_1=list(your_list)
+    return(x_1.index(min(x_1, key=lambda x:abs(x-your_value))))
+def closest_value(your_list,value):# this returns the VALUE of the element of the list CLOSEST to what you put in.
+    return(your_list[find_index(your_list,value)])
+def closest_value_wave(value):
+    return(TWL3[find_index(TWL3,value)])
+def closest_value_flux(value):
+# this returns the FLUX VALUE of the element of the list 'arrayn' CLOSEST to what you put in.
+    return(TFS3[find_index(TWL3,value)])
 #------------------------------------------------------------------------------
 #Fits files Opening
 #File says that the date obs was 6/14/15 7:15:17
@@ -43,28 +55,7 @@ Data1 = fits.open("../Data/lcn701010_x1dsum.fits")
 Data2 = fits.open("../Data/lcn701020_x1dsum.fits")
 #File says that the date obs was 6/14/15 9:12:04
 Data3 = fits.open("../Data/lcn701030_x1dsum.fits")
-"""
-#File says that the date obs was 6/1/14 3:05:15
-Data4 = fits.open('C:/Users/Marcus/Downloads/lcbx01010_x1dsum.fits')
-#File says that the date obs was 6/1/14 3:37:30
-Data5 = fits.open('C:/Users/Marcus/Downloads/lcbx01020_x1dsum.fits')
-#File says that the date obs was 6/1/14 5:01:22
-Data6 = fits.open('C:/Users/Marcus/Downloads/lcbx01030_x1dsum.fits')
 
-#File says that the date obs was 6/12/14 16:19:16
-Data7 = fits.open('C:/Users/Marcus/Downloads/lcbx02010_x1dsum.fits')
-#File says that the date obs was 6/12/14 16:51:31
-Data8 = fits.open('C:/Users/Marcus/Downloads/lcbx02020_x1dsum.fits')
-#File says that the date obs was 6/12/14 18:14:30
-Data9 = fits.open('C:/Users/Marcus/Downloads/lcbx02030_x1dsum.fits')
-
-#File says that the date obs was 6/28/14 11:25:07
-Data10 = fits.open('C:/Users/Marcus/Downloads/lcbx03010_x1dsum.fits')
-#File says that the date obs was 6/28/14 11:57:22
-Data11 = fits.open('C:/Users/Marcus/Downloads/lcbx03020_x1dsum.fits')
-#File says that the date obs was 6/28/14 13:21:29
-Data12 = fits.open('C:/Users/Marcus/Downloads/lcbx03030_x1dsum.fits')
-"""
 #------------------------------------------------------------------------------
 #Data Extraction
 #headNa  = DataN[0].header headNb  = DataN[1].header where N is an int; was removed to save space 
@@ -76,28 +67,7 @@ TbData2 = Data2[1].data
 Data2.close()
 TbData3 = Data3[1].data
 Data3.close()
-"""
-TbData4 = Data4[1].data
-Data4.close()
-TbData5 = Data5[1].data
-Data5.close()
-TbData6 = Data6[1].data
-Data6.close()
 
-TbData7 = Data7[1].data
-Data7.close()
-TbData8 = Data8[1].data
-Data8.close()
-TbData9 = Data9[1].data
-Data9.close()
-
-TbData10 = Data10[1].data
-Data10.close()
-TbData11 = Data11[1].data
-Data11.close()
-TbData12 = Data12[1].data
-Data12.close()
-"""
 #------------------------------------------------------------------------------
 wavelength1=TbData1['wavelength']
 flux1=TbData1['flux']
@@ -124,13 +94,13 @@ TWL3=concatenate((wavelength3[1],wavelength3[0]),axis=0)
 TF3=concatenate((flux3[1],flux3[0]),axis=0)
 ER3=concatenate((error3[1],error3[0]),axis=0)
 #------------------------------------------------------------------------------
-#Test run I need to test this out
+#Observing points of interest
 
 badpix(TF1,5180,5405,0)
 TFS1=smooth(TF1,20)
 TFS3=smooth(TF3,20)
 TFS2=smooth(TF2,20)
-
+"""
 plt.figure(1)
 plt.title('Epoch 6/14/15 G1')
 plt.xlabel(r'Observed Wavelength ($\AA$)')
@@ -187,10 +157,12 @@ plt.axvline(x=1454,color='green')
 
 plt.axvline(x=1380,color='black')
 
-plt.axis([1160,1270,0,4*10**-14])
+plt.axis([1160,1570,0,4*10**-14])
 fig = matplotlib.pyplot.gcf()
 fig.set_size_inches(18.5, 10.5)
+
 """
+
 plt.figure(2)
 plt.title('Epoch 6/14/15 G3')
 plt.xlabel(r'Observed Wavelength ($\AA$)')
@@ -250,7 +222,8 @@ plt.axvline(x=1545,color='green')
 
 plt.axis([1380,1770,0,4*10**-14])
 fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
+fig.set_size_inches(20.5, 10.5)
+"""
 
 plt.figure(3)
 plt.title('Epoch 6/14/15 G2')
@@ -280,169 +253,48 @@ plt.axvline(x=1160,color='black')
 
 plt.axis([890,1210,0,4*10**-14])
 fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
+#fig.set_size_inches(18.5, 10.5)
+
+
 """
 #------------------------------------------------------------------------------
 
-"""#Epoch two
-badpix(TF1,5180,5405,0)
-TFS1=smooth(TF1,20)
-TFS3=smooth(TF3,20)
-TFS2=smooth(TF2,20)
+                  
+x_poly_1425to1455=[closest_value_wave(1426.5),closest_value_wave(1427),closest_value_wave(1430),closest_value_wave(1434),
+                   closest_value_wave(1436),closest_value_wave(1437),closest_value_wave(1438),closest_value_wave(1440),
+                   closest_value_wave(1441),closest_value_wave(1444),closest_value_wave(1445),closest_value_wave(1450),
+                   closest_value_wave(1454)]
+y_poly_1425to1455=[closest_value_flux(1426.5),closest_value_flux(1427),closest_value_flux(1430),closest_value_flux(1434),
+                   closest_value_flux(1436),closest_value_flux(1437),closest_value_flux(1438),closest_value_flux(1440),
+                   closest_value_flux(1441),closest_value_flux(1444),closest_value_flux(1445),closest_value_flux(1450),
+                   closest_value_flux(1454)]
+                   
+x_poly_1500to1545=[closest_value_wave(1501),closest_value_wave(1505),closest_value_wave(1511),closest_value_wave(1517),
+                   closest_value_wave(1523),closest_value_wave(1524),closest_value_wave(1529.5),closest_value_wave(1532),
+                   closest_value_wave(1533),closest_value_wave(1534),closest_value_wave(1535),closest_value_wave(1536.2),
+                   closest_value_wave(1537),closest_value_wave(1540.5),closest_value_wave(1543.5),closest_value_wave(1545)]
+y_poly_1500to1545=[closest_value_flux(1501),closest_value_flux(1505),closest_value_flux(1511),closest_value_flux(1517),
+                   closest_value_flux(1523),closest_value_flux(1524),closest_value_flux(1529.5),closest_value_flux(1532),
+                   closest_value_flux(1533),closest_value_flux(1534),closest_value_flux(1535),closest_value_flux(1536.2),
+                   closest_value_flux(1537),closest_value_flux(1540.5),closest_value_flux(1543.5),closest_value_flux(1545)]
 
-plt.figure(1)
-plt.title('Epoch 6/14/15 G1')
-plt.xlabel(r'Observed Wavelength ($\AA$)')
-plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(TWL1,TFS1)
+x_poly_1680to1745=[closest_value_wave(1680),closest_value_wave(1690),closest_value_wave(1703),closest_value_wave(1707),closest_value_wave(1720),closest_value_wave(1725),closest_value_wave(1735)]
+                    
+                 
+y_poly_1680to1745=[closest_value_flux(1680),closest_value_flux(1690),closest_value_flux(1703),closest_value_flux(1707),closest_value_flux(1720),closest_value_flux(1725),closest_value_flux(1735)]
 
-plt.axvline(x=1210,color='black')
+x_poly_total= x_poly_1425to1455 + x_poly_1500to1545 + x_poly_1680to1745
+y_poly_total= y_poly_1425to1455 + y_poly_1500to1545 + y_poly_1680to1745
+poly_array=(polyfit(x_poly_total,y_poly_total,1))
 
-plt.axvline(x=1238,color='red')
-plt.axvline(x=1240,color='red')
-
-plt.axvline(x=1185,color='red')
-plt.axvline(x=1187,color='red')
-
-plt.axvline(x=1373,color='red')
-plt.axvline(x=1375,color='red')
-
-plt.axvline(x=1407,color='red')
-plt.axvline(x=1409,color='red')
-
-plt.axvline(x=1443,color='red')
-plt.axvline(x=1445,color='red')
-
-
-plt.axvline(x=1345,color='green')
-plt.axvline(x=1347,color='green')
-plt.axvline(x=1350,color='green')
-plt.axvline(x=1354,color='green')
-plt.axvline(x=1352,color='green')
-plt.axvline(x=1353,color='green')
-plt.axvline(x=1354,color='green')
-plt.axvline(x=1355,color='green')
-plt.axvline(x=1359,color='green')
-plt.axvline(x=1365,color='green')
-plt.axvline(x=1366,color='green')
-plt.axvline(x=1371,color='green')
-plt.axvline(x=1372,color='green')
-plt.axvline(x=1373,color='green')
-plt.axvline(x=1374,color='green')
-plt.axvline(x=1375,color='green')
-
-plt.axvline(x=1426.5,color='green')
-plt.axvline(x=1427,color='green')
-plt.axvline(x=1430,color='green')
-plt.axvline(x=1434,color='green')
-plt.axvline(x=1436,color='green')
-plt.axvline(x=1437,color='green')
-plt.axvline(x=1438,color='green')
-plt.axvline(x=1440,color='green')
-plt.axvline(x=1441,color='green')
-plt.axvline(x=1444,color='green')
-plt.axvline(x=1450,color='green')
-plt.axvline(x=1454,color='green')
-
-plt.axvline(x=1380,color='black')
-
-plt.axis([1160,1470,0,4*10**-14])
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
-
-plt.figure(2)
-plt.title('Epoch 6/14/15 G3')
-plt.xlabel(r'Observed Wavelength ($\AA$)')
-plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(TWL3,TFS3)
-
-plt.axvline(x=1470,color='black')
-
-plt.axvline(x=1407,color='red')
-plt.axvline(x=1409,color='red')
-
-plt.axvline(x=1443,color='red')
-plt.axvline(x=1445,color='red')
-
-plt.axvline(x=1515,color='red')
-plt.axvline(x=1517,color='red')
-
-plt.axvline(x=1604,color='red')
-plt.axvline(x=1606,color='red')
-
-plt.axvline(x=1672,color='red')
-plt.axvline(x=1674,color='red')
-
-plt.axvline(x=1746,color='red')
-plt.axvline(x=1748,color='red')
-
-plt.axvline(x=1426.5,color='green')
-plt.axvline(x=1427,color='green')
-plt.axvline(x=1430,color='green')
-plt.axvline(x=1434,color='green')
-plt.axvline(x=1436,color='green')
-plt.axvline(x=1437,color='green')
-plt.axvline(x=1438,color='green')
-plt.axvline(x=1440,color='green')
-plt.axvline(x=1441,color='green')
-plt.axvline(x=1444,color='green')
-plt.axvline(x=1450,color='green')
-plt.axvline(x=1454,color='green')
-
-plt.axvline(x=1501,color='green')
-plt.axvline(x=1505,color='green')
-plt.axvline(x=1511,color='green')
-plt.axvline(x=1517,color='green')
-plt.axvline(x=1523,color='green')
-plt.axvline(x=1524,color='green')
-plt.axvline(x=1529.5,color='green')
-plt.axvline(x=1532,color='green')
-plt.axvline(x=1533,color='green')
-plt.axvline(x=1534,color='green')
-plt.axvline(x=1535,color='green')
-plt.axvline(x=1536.2,color='green')
-plt.axvline(x=1537,color='green')
-plt.axvline(x=1540.5,color='green')
-plt.axvline(x=1543.5,color='green')
-plt.axvline(x=1545,color='green')
-
-
-plt.axis([1380,1770,0,4*10**-14])
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
-
-plt.figure(3)
+plt.figure(4)
 plt.title('Epoch 6/14/15 G2')
 plt.xlabel(r'Observed Wavelength ($\AA$)')
 plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(TWL2,TFS2)
-
-plt.axvline(x=1110,color='red')
-plt.axvline(x=1112,color='red')
-
-plt.axvline(x=1131,color='red')
-plt.axvline(x=1133,color='red')
-
-plt.axvline(x=1172,color='red')
-plt.axvline(x=1174,color='red')
-
-plt.axvline(x=1184,color='red')
-plt.axvline(x=1186,color='red')
-
-plt.axvline(x=1111,color='green')
-plt.axvline(x=1115,color='green')
-plt.axvline(x=1120,color='green')
-plt.axvline(x=1127,color='green')
-plt.axvline(x=1137,color='green')
-
-plt.axvline(x=1160,color='black')
-
-plt.axis([890,1210,0,4*10**-14])
+plt.plot(x_poly_total,y_poly_total)
+plt.plot(TWL3,TFS3)
 fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
-
-"""
-
+fig.set_size_inches(20.5, 10.5)
 #------------------------------------------------------------------------------
 #Interpolation setup for 1 & 2 from Michael's code
 
