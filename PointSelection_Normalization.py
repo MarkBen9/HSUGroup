@@ -290,7 +290,10 @@ x_poly_total_3 = x_poly_anc + x_poly_1425to1455 + x_poly_1500to1545 + x_poly_168
 y_poly_total_3 = y_poly_anc + y_poly_1425to1455 + y_poly_1500to1545 + y_poly_1680to1745
 poly_array_3=(polyfit(x_poly_total_3,y_poly_total_3,1))
 
+
+"""
 slope_flux=[]
+
 for i in range(len(TWL3)):
     #calculating the flux if every point was along the slope
     sf=TWL3[i]*poly_array[0]+poly_array[1]
@@ -300,20 +303,25 @@ for i in range(len(TWL3)):
 #Diving the actual flux by the slope flux to get the normalized flux
     nf=TFS3[i]/slope_flux[i]
     n_flux.append(nf)
-    
-plt.figure(4)
-plt.title('Epoch 6/14/15 G2')
+"""
+
+plt.figure(1)
+plt.title('Epoch 6/14/15 G3 with point selection')
 plt.xlabel(r'Observed Wavelength ($\AA$)')
 plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(poly_array_3)
+plt.plot(x_poly_total_3,y_poly_total_3)
+plt.plot(TWL3,TFS3)
 plt.axis([1380,1770,0,4*10**-14])
 fig = matplotlib.pyplot.gcf()
 fig.set_size_inches(20.5, 10.5)
 
-#plt.figure(5)
-#plt.plot(TWL3,TFS3)
-#fig = matplotlib.pyplot.gcf()
-#fig.set_size_inches(20.5, 10.5)
+
+plt.figure(3)
+plt.title('Point selection')
+plt.plot(x_poly_total_3,y_poly_total_3)
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(20.5, 10.5)
+
 #------------------------------------------------------------------------------
 #Interpolation setup for 1 & 2 from Michael's code
 
