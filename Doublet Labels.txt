@@ -1,6 +1,3 @@
-The following code was taken out as it is purely for graphical purposes. 
-This Declutters the code and can be reimported when needed.
-
 """
 plt.figure(1)
 plt.title('Epoch 6/14/15 G1')
