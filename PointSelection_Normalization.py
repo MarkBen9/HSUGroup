@@ -139,9 +139,19 @@ for i in range(len(TWL3)):
 
 
 plt.figure(1)
-plt.title('Epoch 6/14/15 G3 with point selection')
+plt.title('Epoch 6/14/15 G3 with region selection')
 plt.xlabel(r'Observed Wavelength ($\AA$)')
 plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+##################################### regions for point selection
+plt.axvline(x=1425,color='red')
+plt.axvline(x=1460,color='red')
+plt.axvline(x=1500,color='black')
+plt.axvline(x=1525,color='black')
+plt.axvline(x=1590,color='green')
+plt.axvline(x=1605,color='green')
+plt.axvline(x=1670,color='orange')
+plt.axvline(x=1720,color='orange')
+####################################
 plt.plot(TWL3,TFS3)
 plt.axis([1380,1770,0,7*10**-14])
 fig = matplotlib.pyplot.gcf()
