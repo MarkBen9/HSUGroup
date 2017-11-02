@@ -34,9 +34,6 @@ def smooth(y, box_pts):
     box = ones(box_pts)/box_pts
     y_smooth = convolve(y, box, mode='same')
     return y_smooth
-
-
-
 def find_index(your_list,your_value):#this finds the INDEX of the element of the list CLOSEST to what you put in.
     x_1=list(your_list)
     return(x_1.index(min(x_1, key=lambda x:abs(x-your_value))))
@@ -104,11 +101,12 @@ TF3=concatenate((flux3[1],flux3[0]),axis=0)
 ER3=concatenate((error3[1],error3[0]),axis=0)
 #------------------------------------------------------------------------------
 #Observing points of interest
-
+#Search for flat regious with no absorption and emision points for normalization
 badpix(TF1,5180,5405,0)
 TFS1=smooth(TF1,20)
 TFS3=smooth(TF3,20)
 TFS2=smooth(TF2,20)
+
 
 #------------------------------------------------------------------------------
 point1_1425to1460=make_polyfit_point(TWL3,TFS3,1425,1460)
@@ -125,7 +123,10 @@ Normal_TFS3=[]
 for i in range(len(TWL3)):
     Normal_TFS3.append(TFS3[i]/(best_fit_poly[0]*(TWL3[i])+ best_fit_poly[1]))
 
+
+#---- General
 plt.figure(1)
+
 plt.title('Epoch 6/14/15 G3 with region selection and slope line')
 plt.xlabel(r'Observed Wavelength ($\AA$)')
 plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
@@ -147,8 +148,19 @@ plt.plot(TWL3,TFS3,zorder=0)
 plt.plot(TWL3,poly_array,zorder=1)
 
 plt.axis([1380,1770,0,7*10**-14])
+
 fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(13.5, 10.5)
+fig.set_size_inches(18.5, 10.5)
+#---"""
+plt.figure(5)
+plt.title('G1 Focused at 1458')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.plot(TWL1,TFS1)
+plt.axvline(x=1458,color='red')
+plt.axis([1438,1478,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
 
 plt.figure(2)
 plt.title('Normalized Epoch 6/14/15 G3 ')
@@ -168,6 +180,7 @@ plt.axhline(y=1,color='orange')
 plt.axis([1380,1770,0,3])
 fig = matplotlib.pyplot.gcf()
 fig.set_size_inches(13.5, 10.5)
+
 #------------------------------------------------------------------------------
 #Interpolation setup for 1 & 2 from Michael's code
 
