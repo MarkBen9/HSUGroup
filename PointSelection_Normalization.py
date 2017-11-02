@@ -95,133 +95,82 @@ TF3=concatenate((flux3[1],flux3[0]),axis=0)
 ER3=concatenate((error3[1],error3[0]),axis=0)
 #------------------------------------------------------------------------------
 #Observing points of interest
-
+#Search for flat regious with no absorption and emision points for normalization
 badpix(TF1,5180,5405,0)
 TFS1=smooth(TF1,20)
 TFS3=smooth(TF3,20)
 TFS2=smooth(TF2,20)
-"""
+#---- General
 plt.figure(1)
 plt.title('Epoch 6/14/15 G1')
 plt.xlabel(r'Observed Wavelength ($\AA$)')
 plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
 plt.plot(TWL1,TFS1)
-
+plt.axvline(x=1180,color='red')
+plt.axvline(x=1365,color='red')
+plt.axvline(x=1400,color='red')
+plt.axvline(x=1458,color='red')
+#Intersections of other plots
 plt.axvline(x=1210,color='black')
-
-plt.axvline(x=1187,color='red')
-plt.axvline(x=1188,color='red')
-
-plt.axvline(x=1244,color='red')
-plt.axvline(x=1245,color='red')
-
-plt.axvline(x=1373,color='red')
-plt.axvline(x=1375,color='red')
-
-plt.axvline(x=1407,color='red')
-plt.axvline(x=1409,color='red')
-
-plt.axvline(x=1443,color='red')
-plt.axvline(x=1445,color='red')
-
-
-plt.axvline(x=1345,color='green')
-plt.axvline(x=1347,color='green')
-plt.axvline(x=1350,color='green')
-plt.axvline(x=1354,color='green')
-plt.axvline(x=1352,color='green')
-plt.axvline(x=1353,color='green')
-plt.axvline(x=1354,color='green')
-plt.axvline(x=1355,color='green')
-plt.axvline(x=1359,color='green')
-plt.axvline(x=1365,color='green')
-plt.axvline(x=1366,color='green')
-plt.axvline(x=1371,color='green')
-plt.axvline(x=1372,color='green')
-plt.axvline(x=1373,color='green')
-plt.axvline(x=1374,color='green')
-plt.axvline(x=1375,color='green')
-
-plt.axvline(x=1426.5,color='green')
-plt.axvline(x=1427,color='green')
-plt.axvline(x=1430,color='green')
-plt.axvline(x=1434,color='green')
-plt.axvline(x=1436,color='green')
-plt.axvline(x=1437,color='green')
-plt.axvline(x=1438,color='green')
-plt.axvline(x=1440,color='green')
-plt.axvline(x=1441,color='green')
-plt.axvline(x=1444,color='green')
-plt.axvline(x=1450,color='green')
-plt.axvline(x=1454,color='green')
-
-plt.axvline(x=1380,color='black')
-
+plt.axvline(x=1480,color='black')
 plt.axis([1160,1570,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+#--- Inspection of Point area
+plt.figure(2)
+plt.title('G1 Focused at 1180')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.plot(TWL1,TFS1)
+plt.axvline(x=1180,color='red')
+plt.axis([1160,1200,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+#--- """""
+plt.figure(3)
+plt.title('G1 Focused at 1365')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.plot(TWL1,TFS1)
+plt.axvline(x=1365,color='red')
+plt.axis([1345,1385,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+#---"""
+plt.figure(4)
+plt.title('G1 Focused at 1400')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.plot(TWL1,TFS1)
+plt.axvline(x=1400,color='red')
+plt.axis([1380,1420,0,4*10**-14])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 10.5)
+#---"""
+plt.figure(5)
+plt.title('G1 Focused at 1458')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.plot(TWL1,TFS1)
+plt.axvline(x=1458,color='red')
+plt.axis([1438,1478,0,4*10**-14])
 fig = matplotlib.pyplot.gcf()
 fig.set_size_inches(18.5, 10.5)
 
 
-
+"""
 plt.figure(2)
 plt.title('Epoch 6/14/15 G3')
 plt.xlabel(r'Observed Wavelength ($\AA$)')
 plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
 plt.plot(TWL3,TFS3)
 
-plt.axvline(x=1392.5,color='black')
-plt.axvline(x=1411,color='black')
 
-plt.axvline(x=1407,color='red')
-plt.axvline(x=1409,color='red')
-
-plt.axvline(x=1443,color='red')
-plt.axvline(x=1445,color='red')
-
-plt.axvline(x=1515,color='red')
-plt.axvline(x=1517,color='red')
-
-plt.axvline(x=1604,color='red')
-plt.axvline(x=1606,color='red')
-
-plt.axvline(x=1672,color='red')
-plt.axvline(x=1674,color='red')
-
-plt.axvline(x=1746,color='red')
-plt.axvline(x=1748,color='red')
-
-plt.axvline(x=1426.5,color='green')
-plt.axvline(x=1427,color='green')
-plt.axvline(x=1430,color='green')
-plt.axvline(x=1434,color='green')
-plt.axvline(x=1436,color='green')
-plt.axvline(x=1437,color='green')
-plt.axvline(x=1438,color='green')
-plt.axvline(x=1440,color='green')
-plt.axvline(x=1441,color='green')
-plt.axvline(x=1444,color='green')
-plt.axvline(x=1450,color='green')
-plt.axvline(x=1454,color='green')
-
-plt.axvline(x=1501,color='green')
-plt.axvline(x=1505,color='green')
-plt.axvline(x=1511,color='green')
-plt.axvline(x=1517,color='green')
-plt.axvline(x=1523,color='green')
-plt.axvline(x=1524,color='green')
-plt.axvline(x=1529.5,color='green')
-plt.axvline(x=1532,color='green')
-plt.axvline(x=1533,color='green')
-plt.axvline(x=1534,color='green')
-plt.axvline(x=1535,color='green')
-plt.axvline(x=1536.2,color='green')
-plt.axvline(x=1537,color='green')
-plt.axvline(x=1540.5,color='green')
-plt.axvline(x=1543.5,color='green')
-plt.axvline(x=1545,color='green')
-
-
-plt.axis([1380,1470,0,4*10**-14])
+plt.axvline(x=1480,color='black')
+plt.axvline(x=1460,color='red')
+plt.axvline(x=1535,color='red')
+plt.axvline(x=1600,color='red')
+plt.axis([1380,1790,0,4*10**-14])
 fig = matplotlib.pyplot.gcf()
 fig.set_size_inches(20.5, 10.5)
 
@@ -256,10 +205,10 @@ plt.axis([890,1210,0,4*10**-14])
 fig = matplotlib.pyplot.gcf()
 #fig.set_size_inches(18.5, 10.5)
 
-
 """
-#------------------------------------------------------------------------------
 
+#------------------------------------------------------------------------------
+"""
 x_poly_anc=[closest_value_wave(1392.5),closest_value_wave(1407),closest_value_wave(1411)]
 y_poly_anc=[closest_value_flux(1392.5),closest_value_flux(1407),closest_value_flux(1411)]
                   
@@ -291,7 +240,7 @@ y_poly_total_3 = y_poly_anc + y_poly_1425to1455 + y_poly_1500to1545 + y_poly_168
 poly_array_3=(polyfit(x_poly_total_3,y_poly_total_3,1))
 
 
-"""
+
 slope_flux=[]
 
 for i in range(len(TWL3)):
@@ -303,7 +252,7 @@ for i in range(len(TWL3)):
 #Diving the actual flux by the slope flux to get the normalized flux
     nf=TFS3[i]/slope_flux[i]
     n_flux.append(nf)
-"""
+
 
 plt.figure(1)
 plt.title('Epoch 6/14/15 G3 with point selection')
@@ -320,7 +269,13 @@ plt.figure(3)
 plt.title('Point selection')
 plt.plot(x_poly_total_3,y_poly_total_3)
 fig = matplotlib.pyplot.gcf()
+plt.axis([1380,1770,0,4*10**-14])
 fig.set_size_inches(20.5, 10.5)
+"""
+
+
+
+
 
 #------------------------------------------------------------------------------
 #Interpolation setup for 1 & 2 from Michael's code
