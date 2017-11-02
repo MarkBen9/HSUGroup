@@ -34,9 +34,6 @@ def smooth(y, box_pts):
     box = ones(box_pts)/box_pts
     y_smooth = convolve(y, box, mode='same')
     return y_smooth
-
-
-
 def find_index(your_list,your_value):#this finds the INDEX of the element of the list CLOSEST to what you put in.
     x_1=list(your_list)
     return(x_1.index(min(x_1, key=lambda x:abs(x-your_value))))
@@ -100,7 +97,8 @@ badpix(TF1,5180,5405,0)
 TFS1=smooth(TF1,20)
 TFS3=smooth(TF3,20)
 TFS2=smooth(TF2,20)
-<<<<<<< HEAD
+
+
 #---- General
 plt.figure(1)
 plt.title('Epoch 6/14/15 G1')
@@ -159,136 +157,8 @@ fig = matplotlib.pyplot.gcf()
 fig.set_size_inches(18.5, 10.5)
 
 
-"""
-plt.figure(2)
-plt.title('Epoch 6/14/15 G3')
-plt.xlabel(r'Observed Wavelength ($\AA$)')
-plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(TWL3,TFS3)
-
-
-plt.axvline(x=1480,color='black')
-plt.axvline(x=1460,color='red')
-plt.axvline(x=1535,color='red')
-plt.axvline(x=1600,color='red')
-plt.axis([1380,1790,0,4*10**-14])
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(20.5, 10.5)
-
-
-plt.figure(3)
-plt.title('Epoch 6/14/15 G2')
-plt.xlabel(r'Observed Wavelength ($\AA$)')
-plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(TWL2,TFS2)
-
-plt.axvline(x=1110,color='red')
-plt.axvline(x=1112,color='red')
-
-plt.axvline(x=1131,color='red')
-plt.axvline(x=1133,color='red')
-
-plt.axvline(x=1172,color='red')
-plt.axvline(x=1174,color='red')
-
-plt.axvline(x=1184,color='red')
-plt.axvline(x=1186,color='red')
-
-plt.axvline(x=1111,color='green')
-plt.axvline(x=1115,color='green')
-plt.axvline(x=1120,color='green')
-plt.axvline(x=1127,color='green')
-plt.axvline(x=1137,color='green')
-
-plt.axvline(x=1160,color='black')
-
-plt.axis([890,1210,0,4*10**-14])
-fig = matplotlib.pyplot.gcf()
-#fig.set_size_inches(18.5, 10.5)
-
-"""
-=======
-
 #------------------------------------------------------------------------------
->>>>>>> c522ac5eb331ba90776749714e8436f602d6b231
-
 #------------------------------------------------------------------------------
-"""
-x_poly_anc=[closest_value_wave(1392.5),closest_value_wave(1407),closest_value_wave(1411)]
-y_poly_anc=[closest_value_flux(1392.5),closest_value_flux(1407),closest_value_flux(1411)]
-                  
-x_poly_1425to1455=[closest_value_wave(1426.5),closest_value_wave(1427),closest_value_wave(1430),closest_value_wave(1434),
-                   closest_value_wave(1436),closest_value_wave(1437),closest_value_wave(1438),closest_value_wave(1440),
-                   closest_value_wave(1441),closest_value_wave(1444),closest_value_wave(1445),closest_value_wave(1450),
-                   closest_value_wave(1454)]
-y_poly_1425to1455=[closest_value_flux(1426.5),closest_value_flux(1427),closest_value_flux(1430),closest_value_flux(1434),
-                   closest_value_flux(1436),closest_value_flux(1437),closest_value_flux(1438),closest_value_flux(1440),
-                   closest_value_flux(1441),closest_value_flux(1444),closest_value_flux(1445),closest_value_flux(1450),
-                   closest_value_flux(1454)]
-                   
-x_poly_1500to1545=[closest_value_wave(1501),closest_value_wave(1505),closest_value_wave(1511),closest_value_wave(1517),
-                   closest_value_wave(1523),closest_value_wave(1524),closest_value_wave(1529.5),closest_value_wave(1532),
-                   closest_value_wave(1533),closest_value_wave(1534),closest_value_wave(1535),closest_value_wave(1536.2),
-                   closest_value_wave(1537),closest_value_wave(1540.5),closest_value_wave(1543.5),closest_value_wave(1545)]
-y_poly_1500to1545=[closest_value_flux(1501),closest_value_flux(1505),closest_value_flux(1511),closest_value_flux(1517),
-                   closest_value_flux(1523),closest_value_flux(1524),closest_value_flux(1529.5),closest_value_flux(1532),
-                   closest_value_flux(1533),closest_value_flux(1534),closest_value_flux(1535),closest_value_flux(1536.2),
-                   closest_value_flux(1537),closest_value_flux(1540.5),closest_value_flux(1543.5),closest_value_flux(1545)]
-
-x_poly_1680to1745=[closest_value_wave(1680),closest_value_wave(1690),closest_value_wave(1703),closest_value_wave(1707),closest_value_wave(1720),closest_value_wave(1725),closest_value_wave(1735)]
-                    
-                 
-y_poly_1680to1745=[closest_value_flux(1680),closest_value_flux(1690),closest_value_flux(1703),closest_value_flux(1707),closest_value_flux(1720),closest_value_flux(1725),closest_value_flux(1735)]
-
-x_poly_total_3 = x_poly_anc + x_poly_1425to1455 + x_poly_1500to1545 + x_poly_1680to1745
-y_poly_total_3 = y_poly_anc + y_poly_1425to1455 + y_poly_1500to1545 + y_poly_1680to1745
-poly_array_3=(polyfit(x_poly_total_3,y_poly_total_3,1))
-
-<<<<<<< HEAD
-
-
-slope_flux=[]
-
-for i in range(len(TWL3)):
-    #calculating the flux if every point was along the slope
-    sf=TWL3[i]*poly_array[0]+poly_array[1]
-    slope_flux.append(sf)
-n_flux=[]
-for i in range(len(TWL3)):
-#Diving the actual flux by the slope flux to get the normalized flux
-    nf=TFS3[i]/slope_flux[i]
-    n_flux.append(nf)
-=======
-Normal_TFS3=[]
-for i in range(len(TWL3)):
-    Normal_TFS3.append(TFS3[i]/(poly_array_3[0]*(TWL3[i])+ poly_array_3[1]))
->>>>>>> c522ac5eb331ba90776749714e8436f602d6b231
-
-
-plt.figure(1)
-plt.title('Epoch 6/14/15 G3 with point selection')
-plt.xlabel(r'Observed Wavelength ($\AA$)')
-plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(TWL3,Normal_TFS3)
-plt.axis([1380,1770,0,2])
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(13.5, 10.5)
-
-<<<<<<< HEAD
-plt.figure(3)
-plt.title('Point selection')
-plt.plot(x_poly_total_3,y_poly_total_3)
-fig = matplotlib.pyplot.gcf()
-plt.axis([1380,1770,0,4*10**-14])
-fig.set_size_inches(20.5, 10.5)
-"""
-
-
-
-
-=======
-#test
->>>>>>> c522ac5eb331ba90776749714e8436f602d6b231
 
 #------------------------------------------------------------------------------
 #Interpolation setup for 1 & 2 from Michael's code
