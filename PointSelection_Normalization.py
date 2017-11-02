@@ -44,6 +44,15 @@ def closest_value_wave(value):
 def closest_value_flux(value):
 # this returns the FLUX VALUE of the element of the list 'arrayn' CLOSEST to what you put in.
     return(TFS3[find_index(TWL3,value)])
+def make_polyfit_point(xlist,ylist,start,end):
+    x_ave=closest_value(xlist,(start+end)/2)
+    start_index=find_index(xlist,closest_value_wave(start))
+    end_index=find_index(xlist,closest_value_wave(end))
+    y_sum=0
+    for i in range(start_index,end_index+1,1):
+        y_sum+=ylist[i]
+    y_ave=closest_value(ylist,y_sum/(end_index-start_index))       
+    return [x_ave,y_ave]
 #------------------------------------------------------------------------------
 #Fits files Opening
 #File says that the date obs was 6/14/15 7:15:17
@@ -99,50 +108,47 @@ TFS3=smooth(TF3,20)
 TFS2=smooth(TF2,20)
 
 
+#------------------------------------------------------------------------------
+point1_1425to1460=make_polyfit_point(TWL3,TFS3,1425,1460)
+point2_1500to1525=make_polyfit_point(TWL3,TFS3,1500,1525)
+point3_1590to1605=make_polyfit_point(TWL3,TFS3,1590,1605)
+point4_1675to1720=make_polyfit_point(TWL3,TFS3,1675,1720)
+
+x_poly=[point1_1425to1460[0],point2_1500to1525[0],point3_1590to1605[0],point4_1675to1720[0]]
+y_poly=[point1_1425to1460[1],point2_1500to1525[1],point3_1590to1605[1],point4_1675to1720[1]]
+best_fit_poly=(polyfit(x_poly,y_poly,1))
+poly_array=polyval(best_fit_poly, TWL3)
+
+Normal_TFS3=[]
+for i in range(len(TWL3)):
+    Normal_TFS3.append(TFS3[i]/(best_fit_poly[0]*(TWL3[i])+ best_fit_poly[1]))
+
+
 #---- General
 plt.figure(1)
-plt.title('Epoch 6/14/15 G1')
+
+plt.title('Epoch 6/14/15 G3 with region selection and slope line')
 plt.xlabel(r'Observed Wavelength ($\AA$)')
 plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(TWL1,TFS1)
-plt.axvline(x=1180,color='red')
-plt.axvline(x=1365,color='red')
-plt.axvline(x=1400,color='red')
-plt.axvline(x=1458,color='red')
-#Intersections of other plots
-plt.axvline(x=1210,color='black')
-plt.axvline(x=1480,color='black')
-plt.axis([1160,1570,0,4*10**-14])
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
-#--- Inspection of Point area
-plt.figure(2)
-plt.title('G1 Focused at 1180')
-plt.xlabel(r'Observed Wavelength ($\AA$)')
-plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(TWL1,TFS1)
-plt.axvline(x=1180,color='red')
-plt.axis([1160,1200,0,4*10**-14])
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
-#--- """""
-plt.figure(3)
-plt.title('G1 Focused at 1365')
-plt.xlabel(r'Observed Wavelength ($\AA$)')
-plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(TWL1,TFS1)
-plt.axvline(x=1365,color='red')
-plt.axis([1345,1385,0,4*10**-14])
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
-#---"""
-plt.figure(4)
-plt.title('G1 Focused at 1400')
-plt.xlabel(r'Observed Wavelength ($\AA$)')
-plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(TWL1,TFS1)
-plt.axvline(x=1400,color='red')
-plt.axis([1380,1420,0,4*10**-14])
+##################################### regions for point selection
+plt.axvline(x=1425,color='red')
+plt.axvline(x=1460,color='red')
+plt.plot(point1_1425to1460[0], point1_1425to1460[1], marker='o', markersize=10, color="red",zorder=2)
+plt.axvline(x=1500,color='black')
+plt.axvline(x=1525,color='black')
+plt.plot(point2_1500to1525[0], point2_1500to1525[1], marker='o', markersize=10, color="black",zorder=2)
+plt.axvline(x=1590,color='purple')
+plt.axvline(x=1605,color='purple')
+plt.plot(point3_1590to1605[0], point3_1590to1605[1], marker='o', markersize=10, color="purple",zorder=2)
+plt.axvline(x=1675,color='orange')
+plt.axvline(x=1720,color='orange')
+plt.plot(point4_1675to1720[0], point4_1675to1720[1], marker='o', markersize=10, color="orange",zorder=2)
+####################################
+plt.plot(TWL3,TFS3,zorder=0)
+plt.plot(TWL3,poly_array,zorder=1)
+
+plt.axis([1380,1770,0,7*10**-14])
+
 fig = matplotlib.pyplot.gcf()
 fig.set_size_inches(18.5, 10.5)
 #---"""
@@ -156,9 +162,24 @@ plt.axis([1438,1478,0,4*10**-14])
 fig = matplotlib.pyplot.gcf()
 fig.set_size_inches(18.5, 10.5)
 
+plt.figure(2)
+plt.title('Normalized Epoch 6/14/15 G3 ')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.plot(TWL3,Normal_TFS3,zorder=0)
+plt.axvline(x=1425,color='red')
+plt.axvline(x=1460,color='red')
+plt.axvline(x=1500,color='black')
+plt.axvline(x=1525,color='black')
+plt.axvline(x=1590,color='purple')
+plt.axvline(x=1605,color='purple')
+plt.axvline(x=1675,color='orange')
+plt.axvline(x=1720,color='orange')
+plt.axhline(y=1,color='orange')
 
-#------------------------------------------------------------------------------
-#------------------------------------------------------------------------------
+plt.axis([1380,1770,0,3])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(13.5, 10.5)
 
 #------------------------------------------------------------------------------
 #Interpolation setup for 1 & 2 from Michael's code
