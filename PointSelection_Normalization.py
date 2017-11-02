@@ -149,7 +149,7 @@ plt.axvline(x=1500,color='black')
 plt.axvline(x=1525,color='black')
 plt.axvline(x=1590,color='green')
 plt.axvline(x=1605,color='green')
-plt.axvline(x=1670,color='orange')
+plt.axvline(x=1675,color='orange')
 plt.axvline(x=1720,color='orange')
 ####################################
 plt.plot(TWL3,TFS3)
