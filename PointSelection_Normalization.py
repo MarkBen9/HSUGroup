@@ -46,10 +46,10 @@ def closest_value_flux(value):
     return(TFS3[find_index(TWL3,value)])
 def make_polyfit_point(xlist,ylist,start,end):
     x_ave=closest_value(xlist,(start+end)/2)
-    start_index=find_index(xlist,closest_value_wave(start))
-    end_index=find_index(xlist,closest_value_wave(end))
+    start_index=find_index(xlist,closest_value(xlist,start))
+    end_index=find_index(xlist,closest_value(xlist,end))
     y_sum=0
-    for i in range(start_index,end_index+1,1):
+    for i in range(start_index,end_index,1):
         y_sum+=ylist[i]
     y_ave=closest_value(ylist,y_sum/(end_index-start_index))       
     return [x_ave,y_ave]
@@ -149,16 +149,6 @@ plt.plot(TWL3,poly_array,zorder=1)
 
 plt.axis([1380,1770,0,7*10**-14])
 
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
-#---"""
-plt.figure(5)
-plt.title('G1 Focused at 1458')
-plt.xlabel(r'Observed Wavelength ($\AA$)')
-plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(TWL1,TFS1)
-plt.axvline(x=1458,color='red')
-plt.axis([1438,1478,0,4*10**-14])
 fig = matplotlib.pyplot.gcf()
 fig.set_size_inches(18.5, 10.5)
 
