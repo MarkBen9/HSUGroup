@@ -24,7 +24,8 @@ from numpy import sqrt
 from numpy import ones
 from numpy import convolve
 import matplotlib.patches as mpatches
-
+from numpy import polyfit
+from numpy import polyval
 #------------------------------------------------------------------------------
 #from Michael's code)
 def badpix(list_name,xmin_indice,xmax_indice,replace_val):
@@ -104,72 +105,46 @@ ER3=concatenate((error3[1],error3[0]),axis=0)
 #Search for flat regious with no absorption and emision points for normalization
 badpix(TF1,5180,5405,0)
 TFS1=smooth(TF1,20)
-TFS3=smooth(TF3,20)
 TFS2=smooth(TF2,20)
-
-
+TFS3=smooth(TF3,20)
 #------------------------------------------------------------------------------
-point1_1425to1460=make_polyfit_point(TWL3,TFS3,1425,1460)
-point2_1500to1525=make_polyfit_point(TWL3,TFS3,1500,1525)
-point3_1590to1605=make_polyfit_point(TWL3,TFS3,1590,1605)
-point4_1675to1720=make_polyfit_point(TWL3,TFS3,1675,1720)
+Grating_1_polyfitpoints=[
+                         make_polyfit_point(TWL2,TFS2,1110,1130),
+                         make_polyfit_point(TWL2,TFS2,1150,1190)
+                         ]
+Grating_2_polyfitpoints=[make_polyfit_point(TWL1,TFS1,1175,1185),
+                         make_polyfit_point(TWL1,TFS1,1345,1365),
+                         make_polyfit_point(TWL1,TFS1,1395,1402),
+                         make_polyfit_point(TWL1,TFS1,1420,1460)
+                         ]
+Grating_3_polyfitpoints=[make_polyfit_point(TWL3,TFS3,1425,1460),
+                         make_polyfit_point(TWL3,TFS3,1500,1525),
+                         make_polyfit_point(TWL3,TFS3,1590,1605),
+                         make_polyfit_point(TWL3,TFS3,1675,1720)]
 
-x_poly=[point1_1425to1460[0],point2_1500to1525[0],point3_1590to1605[0],point4_1675to1720[0]]
-y_poly=[point1_1425to1460[1],point2_1500to1525[1],point3_1590to1605[1],point4_1675to1720[1]]
-best_fit_poly=(polyfit(x_poly,y_poly,1))
-poly_array=polyval(best_fit_poly, TWL3)
+x_poly_1=[item[0]for item in Grating_1_polyfitpoints]
+y_poly_1=[item[1]for item in Grating_1_polyfitpoints]
+x_poly_2=[item[0]for item in Grating_2_polyfitpoints]
+y_poly_2=[item[1]for item in Grating_2_polyfitpoints]
+x_poly_3=[item[0]for item in Grating_3_polyfitpoints]
+y_poly_3=[item[1]for item in Grating_3_polyfitpoints]
+best_fit_poly_1=(polyfit(x_poly_1,y_poly_1,1))
+best_fit_poly_2=(polyfit(x_poly_2,y_poly_2,1))
+best_fit_poly_3=(polyfit(x_poly_3,y_poly_3,1))
+poly_array_1=polyval(best_fit_poly_1, TWL2)
+poly_array_2=polyval(best_fit_poly_2, TWL1)
+poly_array_3=polyval(best_fit_poly_3, TWL3)
 
+Normal_TFS1=[]
+for i in range(len(TWL2)):
+    Normal_TFS1.append(TFS2[i]/(best_fit_poly_1[0]*(TWL2[i])+ best_fit_poly_1[1]))
+Normal_TFS2=[]
+for i in range(len(TWL1)):
+    Normal_TFS2.append(TFS1[i]/(best_fit_poly_2[0]*(TWL1[i])+ best_fit_poly_2[1]))
 Normal_TFS3=[]
 for i in range(len(TWL3)):
-    Normal_TFS3.append(TFS3[i]/(best_fit_poly[0]*(TWL3[i])+ best_fit_poly[1]))
+    Normal_TFS3.append(TFS3[i]/(best_fit_poly_3[0]*(TWL3[i])+ best_fit_poly_3[1]))
 
-
-#---- General
-plt.figure(1)
-
-plt.title('Epoch 6/14/15 G3 with region selection and slope line')
-plt.xlabel(r'Observed Wavelength ($\AA$)')
-plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-##################################### regions for point selection
-plt.axvline(x=1425,color='red')
-plt.axvline(x=1460,color='red')
-plt.plot(point1_1425to1460[0], point1_1425to1460[1], marker='o', markersize=10, color="red",zorder=2)
-plt.axvline(x=1500,color='black')
-plt.axvline(x=1525,color='black')
-plt.plot(point2_1500to1525[0], point2_1500to1525[1], marker='o', markersize=10, color="black",zorder=2)
-plt.axvline(x=1590,color='purple')
-plt.axvline(x=1605,color='purple')
-plt.plot(point3_1590to1605[0], point3_1590to1605[1], marker='o', markersize=10, color="purple",zorder=2)
-plt.axvline(x=1675,color='orange')
-plt.axvline(x=1720,color='orange')
-plt.plot(point4_1675to1720[0], point4_1675to1720[1], marker='o', markersize=10, color="orange",zorder=2)
-####################################
-plt.plot(TWL3,TFS3,zorder=0)
-plt.plot(TWL3,poly_array,zorder=1)
-
-plt.axis([1380,1770,0,7*10**-14])
-
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
-
-plt.figure(2)
-plt.title('Normalized Epoch 6/14/15 G3 ')
-plt.xlabel(r'Observed Wavelength ($\AA$)')
-plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-plt.plot(TWL3,Normal_TFS3,zorder=0)
-plt.axvline(x=1425,color='red')
-plt.axvline(x=1460,color='red')
-plt.axvline(x=1500,color='black')
-plt.axvline(x=1525,color='black')
-plt.axvline(x=1590,color='purple')
-plt.axvline(x=1605,color='purple')
-plt.axvline(x=1675,color='orange')
-plt.axvline(x=1720,color='orange')
-plt.axhline(y=1,color='orange')
-
-plt.axis([1380,1770,0,3])
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(13.5, 10.5)
 
 #------------------------------------------------------------------------------
 #Interpolation setup for 1 & 2 from Michael's code
