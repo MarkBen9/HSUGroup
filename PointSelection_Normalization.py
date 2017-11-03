@@ -42,8 +42,7 @@ def closest_value(your_list,value):# this returns the VALUE of the element of th
     return(your_list[find_index(your_list,value)])
 def closest_value_wave(value):
     return(TWL3[find_index(TWL3,value)])
-def closest_value_flux(value):
-# this returns the FLUX VALUE of the element of the list 'arrayn' CLOSEST to what you put in.
+def closest_value_flux(value):# this returns the FLUX VALUE of the element of the list 'arrayn' CLOSEST to what you put in.
     return(TFS3[find_index(TWL3,value)])
 def make_polyfit_point(xlist,ylist,start,end):
     x_ave=closest_value(xlist,(start+end)/2)
@@ -135,13 +134,13 @@ poly_array_1=polyval(best_fit_poly_1, TWL2)
 poly_array_2=polyval(best_fit_poly_2, TWL1)
 poly_array_3=polyval(best_fit_poly_3, TWL3)
 
-Normal_TFS1=[]
+Normal_TFS1=[]#grating 1
 for i in range(len(TWL2)):
     Normal_TFS1.append(TFS2[i]/(best_fit_poly_1[0]*(TWL2[i])+ best_fit_poly_1[1]))
-Normal_TFS2=[]
+Normal_TFS2=[]#grating 2
 for i in range(len(TWL1)):
     Normal_TFS2.append(TFS1[i]/(best_fit_poly_2[0]*(TWL1[i])+ best_fit_poly_2[1]))
-Normal_TFS3=[]
+Normal_TFS3=[]#grating 3
 for i in range(len(TWL3)):
     Normal_TFS3.append(TFS3[i]/(best_fit_poly_3[0]*(TWL3[i])+ best_fit_poly_3[1]))
 
