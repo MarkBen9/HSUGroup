@@ -1,13 +1,3 @@
-"""
-Created on Tue Mar 28 10:03:11 2017
-@author: Marcus
-Shorten/Cleaned Version
-This Code is basically the first three steps: 
-Data Extractions and Plot
-Normalization and Plot
-Inturpolation and Plot
-"""
-
 from pylab import * 
 from numpy import *
 from astropy.io import fits
@@ -26,8 +16,6 @@ from numpy import convolve
 import matplotlib.patches as mpatches
 from numpy import polyfit
 from numpy import polyval
-#------------------------------------------------------------------------------
-#from Michael's code)
 def badpix(list_name,xmin_indice,xmax_indice,replace_val):
     for i in range(xmin_indice,xmax_indice):
         list_name[i]=replace_val
@@ -44,7 +32,7 @@ def closest_value_wave(value):
     return(TWL3[find_index(TWL3,value)])
 def closest_value_flux(value):# this returns the FLUX VALUE of the element of the list 'arrayn' CLOSEST to what you put in.
     return(TFS3[find_index(TWL3,value)])
-def make_polyfit_point(xlist,ylist,start,end):
+def make_polyfit_point(xlist,ylist,start,end):#give this function some data and a range and it spits out the average x and y
     x_ave=closest_value(xlist,(start+end)/2)
     start_index=find_index(xlist,closest_value(xlist,start))
     end_index=find_index(xlist,closest_value(xlist,end))
@@ -53,6 +41,15 @@ def make_polyfit_point(xlist,ylist,start,end):
         y_sum+=ylist[i]
     y_ave=closest_value(ylist,y_sum/(end_index-start_index))       
     return [x_ave,y_ave]
+def remove_zero_error(error):
+    TME1=[]
+    for i in range (0,len(error)):
+        if error[i] == 0:
+            TME1.append(1)
+        else:
+            TME1.append(error[i])  
+    return TME1
+
 #------------------------------------------------------------------------------
 #Fits files Opening
 #File says that the date obs was 6/14/15 7:15:17
@@ -99,28 +96,38 @@ ER2=concatenate((error2[1],error2[0]),axis=0)
 TWL3=concatenate((wavelength3[1],wavelength3[0]),axis=0)
 TF3=concatenate((flux3[1],flux3[0]),axis=0)
 ER3=concatenate((error3[1],error3[0]),axis=0)
+
+TWL1,TWL2=TWL2,TWL1 #SWAPPING VARIBLE NAMES SO IT MAKES SENSE
+TF1,TF2=TF2,TF1     #SWAPPING VARIBLE NAMES SO IT MAKES SENSE
+ER1,ER2=ER2,ER1     #SWAPPING VARIBLE NAMES SO IT MAKES SENSE
 #------------------------------------------------------------------------------
 #Observing points of interest
 #Search for flat regious with no absorption and emision points for normalization
-badpix(TF1,5180,5405,0)
+badpix(TF2,5180,5405,0)
 TFS1=smooth(TF1,20)
 TFS2=smooth(TF2,20)
 TFS3=smooth(TF3,20)
-#------------------------------------------------------------------------------
+###############################################################################
+###############################################################################
 Grating_1_polyfitpoints=[
-                         make_polyfit_point(TWL2,TFS2,1110,1130),
-                         make_polyfit_point(TWL2,TFS2,1150,1190)
+                         make_polyfit_point(TWL1,TFS1,1110,1130),
+                         make_polyfit_point(TWL1,TFS1,1150,1190)
                          ]
-Grating_2_polyfitpoints=[make_polyfit_point(TWL1,TFS1,1175,1185),
-                         make_polyfit_point(TWL1,TFS1,1345,1365),
-                         make_polyfit_point(TWL1,TFS1,1395,1402),
-                         make_polyfit_point(TWL1,TFS1,1420,1460)
+Grating_2_polyfitpoints=[make_polyfit_point(TWL2,TFS2,1175,1185),
+                         make_polyfit_point(TWL2,TFS2,1345,1365),
+                         make_polyfit_point(TWL2,TFS2,1395,1402),
+                         make_polyfit_point(TWL2,TFS2,1420,1460)
                          ]
 Grating_3_polyfitpoints=[make_polyfit_point(TWL3,TFS3,1425,1460),
                          make_polyfit_point(TWL3,TFS3,1500,1525),
                          make_polyfit_point(TWL3,TFS3,1590,1605),
                          make_polyfit_point(TWL3,TFS3,1675,1720)]
 
+# For different epochs, input different ranges that represent the continuum. 
+#That should be it.
+
+###############################################################################
+###############################################################################
 x_poly_1=[item[0]for item in Grating_1_polyfitpoints]
 y_poly_1=[item[1]for item in Grating_1_polyfitpoints]
 x_poly_2=[item[0]for item in Grating_2_polyfitpoints]
@@ -135,168 +142,67 @@ poly_array_2=polyval(best_fit_poly_2, TWL1)
 poly_array_3=polyval(best_fit_poly_3, TWL3)
 
 Normal_TFS1=[]#grating 1
-for i in range(len(TWL2)):
-    Normal_TFS1.append(TFS2[i]/(best_fit_poly_1[0]*(TWL2[i])+ best_fit_poly_1[1]))
-Normal_TFS2=[]#grating 2
 for i in range(len(TWL1)):
-    Normal_TFS2.append(TFS1[i]/(best_fit_poly_2[0]*(TWL1[i])+ best_fit_poly_2[1]))
+    Normal_TFS1.append(TFS1[i]/(best_fit_poly_1[0]*(TWL1[i])+ best_fit_poly_1[1]))
+Normal_TFS2=[]#grating 2
+for i in range(len(TWL2)):
+    Normal_TFS2.append(TFS2[i]/(best_fit_poly_2[0]*(TWL2[i])+ best_fit_poly_2[1]))
 Normal_TFS3=[]#grating 3
 for i in range(len(TWL3)):
     Normal_TFS3.append(TFS3[i]/(best_fit_poly_3[0]*(TWL3[i])+ best_fit_poly_3[1]))
 
+TWL1_TWL2= arange(TWL1[0],TWL2[-1],.00997)
+TWL1_TWL2_TWL3= arange(TWL1[0],TWL3[-1],0.0122408)
 
-#------------------------------------------------------------------------------
-#Interpolation setup for 1 & 2 from Michael's code
+Iflux1=interp(TWL1_TWL2,TWL1,Normal_TFS1,left=0,right=0)
+Ierror1=interp(TWL1_TWL2,TWL1,ER1,left=0,right=0)
+Iflux2=interp(TWL1_TWL2,TWL2,Normal_TFS2,left=0,right=0)
+Ierror2=interp(TWL1_TWL2,TWL2,ER2,left=0,right=0)
+Iflux3=interp(TWL1_TWL2_TWL3,TWL3,Normal_TFS3,left=0,right=0)
+Ierror3=interp(TWL1_TWL2_TWL3,TWL3,ER3,left=0,right=0)
 
-#set_printoptions(threshold=nan) #Prints out entire array if you chose to print an array
-"""
-begin=TWL2[0] #Beginning of the first grating
-end=TWL1[-1]#End of the second grating
-array= arange(begin,end,.00997)#This is the array that we are interpolating to.
-
-Iflux2=interp(array,TWL2,TF2,left=0,right=0)#This is the flux interpolation for the first grating, we want zero for the left and right because if a point is outside of the wavelength range we are looking at we do not want to create data.
-Ierror2=interp(array,TWL2,ER2,left=0,right=0)#This is the error interpolation for the first grating
-
-Iflux1=interp(array,TWL1,TF1,left=0,right=0)#This is the flux interpolation for the second grating
-Ierror1=interp(array,TWL1,ER1,left=0,right=0)#This is the error interpolation for the second grating
-
-#------------------------------------------------------------------------------
-#This is Marcus Method to remove 0 from error sample
-TME1=[]
-TME2=[]
-for i in range (0,len(Ierror1)):
-    if Ierror1[i] == 0:
-        TME1.append(1)
-    else:
-        TME1.append(Ierror1[i])
+TME1=remove_zero_error(Ierror1)
+TME2=remove_zero_error(Ierror2)
+TME3=remove_zero_error(Ierror3)
         
-for i in range (0,len(Ierror2)):
-    if Ierror2[i] == 0:
-        TME2.append(1)
-    else:
-        TME2.append(Ierror2[i])
-print(len(array))
-#------------------------------------------------------------------------------
-#Truncated form Michael's code
-#3/28 2-3?)
-
-output_array=[]    #Empty array to store the new list of flux values. 
-for i in range(0,len(array)):
-    if (Iflux2[i]==0 and Iflux1[i]==0).all(): #if both of the values are zero then return zero
-            output_array.append(0.0)#stores value in array
+Averaged_TFS1_TFS2=[]
+for i in range(0,len(TWL1_TWL2)):
+    if (Iflux2[i]==0 and Iflux1[i]==0).all():
+            Averaged_TFS1_TFS2.append(0.0)
     else:      
-            weight=(1/TME2[i])
-            weight2=(1/TME1[i])
-            spec=Iflux2[i]
-            spec2=Iflux1[i]
-            output_array.append((weight*spec+weight2*spec2)/(weight+weight2))
-            
-#------------------------------------------------------------------------------
-badpix(output_array,32323,32550,0)
-PGflux_1and2=output_array
+            weight=(1/TME1[i])
+            weight2=(1/TME2[i])
+            spec=Iflux1[i]
+            spec2=Iflux2[i]
+            Averaged_TFS1_TFS2.append((weight*spec+weight2*spec2)/(weight+weight2))  
 
-#plt.plot(PGflux_1and2)
+badpix(Averaged_TFS1_TFS2,32323,32550,0)
+Iflux_1_2=interp(TWL1_TWL2_TWL3,TWL1_TWL2,Averaged_TFS1_TFS2,left=0,right=0)
 
-#------------------------------------------------------------------------------
-#Interpolation of set 3
-#From Michael's code 
-#4-6-17 2h)
+Error_TFS1_TFS2=[]
+for i in range(len(TWL1_TWL2)):
+    if (Ierror1[i]!=0 and Ierror2[i]==0).all():
+        Error_TFS1_TFS2.append(Ierror1[i])
+    elif (Ierror1[i]==0 and Ierror2[i]!=0).all():
+        Error_TFS1_TFS2.append(Ierror2[i])
+    elif (Ierror1[i]==0 and Ierror2[i]==0).all():
+        Error_TFS1_TFS2.append(0.0)            
+    else:#if neither of the error values are zero then take the weighted average of the error values.
+        Error_TFS1_TFS2.append(sqrt((Ierror1[i])**2+(Ierror2[i])**2))   
 
-begin2=TWL2[0]#Beginning of the first grating
-end2=TWL3[-1]#End of the *THIRD* grating
-arrayn= arange(begin2,end2,.0122408)#This is the array that we are interpolating to.NEW STEP SIZE, NEW ARRAY NAME.
+Ierror_1_2=interp(TWL1_TWL2_TWL3,TWL1_TWL2,Error_TFS1_TFS2,left=0,right=0)
+TME_1_2=remove_zero_error(Ierror_1_2)
 
-Iflux3=interp(arrayn,TWL3,TF3,left=0,right=0)#This is the flux interpolation for the THIRD grating
-Ierror3=interp(arrayn,TWL3,ER3,left=0,right=0)#This is the error interpolation for the THIRD grating
-
-PGflux_1and2n=interp(arrayn,array,PGflux_1and2,left=0,right=0)
-
-
-#------------------------------------------------------------------------------
-#combining error sets for 1 and 2
-Cerror1and2=[]
-for i in range(len(array)):
-    if (Ierror2[i]==0 and Ierror1[i]!=0).all():#If the error value for the first grating is zero dont weight the corresponding flux value
-        Cerror1and2.append(Ierror1[i])
-    elif (Ierror1[i]==0 and Ierror2[i]!=0).all():#If the error value for the first grating is zero dont weight the corresponding flux value
-        Cerror1and2.append(Ierror2[i])
-    elif (Ierror1[i]==0 and Ierror2[i]==0).all():#if both error values are zero then dont weight the flux values
-        Cerror1and2.append(0.0)            
-    else:#if neither of the error values are zero then take the weighted average of the flux values.
-        Cerror1and2.append(sqrt((Ierror1[i])**2+(Ierror2[i])**2))#stores value in array   
-ICerror1and2=interp(arrayn,array,Cerror1and2,left=0,right=0)
-
-#------------------------------------------------------------------------------
-#remove 0 from error
-
-TME1and2=[]
-TME3=[]
-
-for i in range (0,len(ICerror1and2)):
-    if ICerror1and2[i] == 0:
-        TME1and2.append(1)
+Averaged_TFS1_TFS2_TFS3=[]
+for i in range(0,len(TWL1_TWL2_TWL3)):  
+    if(Iflux_1_2[i]==0 and Iflux3[i]==0):
+        Averaged_TFS1_TFS2_TFS3.append(0.0)
     else:
-        TME1and2.append(ICerror1and2[i])
- 
-for i in range (0,len(Ierror3)):
-    if Ierror3[i] == 0:
-        TME3.append(1)
-    else:
-        TME3.append(Ierror3[i])
+        weight=(1/TME_1_2[i])
+        weight2=(1/TME3[i])
+        spec=Iflux_1_2[i]
+        spec2=Iflux3[i]
+        Averaged_TFS1_TFS2_TFS3.append((weight*spec+weight2*spec2)/(weight+weight2))
 
-#------------------------------------------------------------------------------
-#1h
-TFS=[]
-for i in range(0,len(arrayn)):
-    if (PGflux_1and2n[i]==0 and Iflux3[i]==0).all(): #if both of the values are zero then return zero
-            TFS.append(0.0)#stores value in array
-    else:      
-            weight=(1/TME1and2[i])
-            weight2=(1/TME3[i])
-            spec=PGflux_1and2n[i]
-            spec2=Iflux3[i]
-            TFS.append((weight*spec+weight2*spec2)/(weight+weight2))
-            
-TFSC=smooth(TFS,20)        
-TFS1=smooth(TF1,20)   
-TFS2=smooth(TF2,20) 
-badpix(TFS1,5180,5405,0)
-        
-plt.figure(1)
-plt.title('Epoch 6/14/15')
-plt.xlabel('Wavelength')
-plt.ylabel('Flux')
-plt.plot(TWL1,TFS1)
-plt.plot(TWL2,TFS2)
-plt.plot(arrayn,TFSC)
-plt.axis([1160,1210,0,4*10**-14])
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
-
-plt.figure(2)
-plt.title('Epoch 6/14/15')
-plt.xlabel('Wavelength')
-plt.ylabel('Flux')
-plt.plot(TWL1,TFS1)
-plt.axis([1160,1260,0,4*10**-14])
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
-
-plt.figure(3)
-plt.title('Epoch 6/14/15')
-plt.xlabel('Wavelength')
-plt.ylabel('Flux')
-plt.plot(TWL1,TFS1)
-plt.axis([1260,1360,0,15*10**-14])
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
-
-plt.figure(4)
-plt.title('Epoch 6/14/15')
-plt.xlabel('Wavelength')
-plt.ylabel('Flux')
-plt.plot(TWL1,TFS1)
-plt.axis([1360,1460,0,4*10**-14])
-fig = matplotlib.pyplot.gcf()
-fig.set_size_inches(18.5, 10.5)
-"""
+Final_x_spectrum=TWL1_TWL2_TWL3
+Final_y_spectrum=Averaged_TFS1_TFS2_TFS3
