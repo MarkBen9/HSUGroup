@@ -28,10 +28,6 @@ def find_index(your_list,your_value):#this finds the INDEX of the element of the
     return(x_1.index(min(x_1, key=lambda x:abs(x-your_value))))
 def closest_value(your_list,value):# this returns the VALUE of the element of the list CLOSEST to what you put in.
     return(your_list[find_index(your_list,value)])
-def closest_value_wave(value):
-    return(TWL3[find_index(TWL3,value)])
-def closest_value_flux(value):# this returns the FLUX VALUE of the element of the list 'arrayn' CLOSEST to what you put in.
-    return(TFS3[find_index(TWL3,value)])
 def make_polyfit_point(xlist,ylist,start,end):#give this function some data and a range and it spits out the average x and y
     x_ave=closest_value(xlist,(start+end)/2)
     start_index=find_index(xlist,closest_value(xlist,start))
@@ -49,7 +45,6 @@ def remove_zero_error(error):
         else:
             TME1.append(error[i])  
     return TME1
-
 #------------------------------------------------------------------------------
 #Fits files Opening
 #File says that the date obs was 6/14/15 7:15:17
@@ -58,11 +53,10 @@ Data1 = fits.open("../Data/lcn701010_x1dsum.fits")
 Data2 = fits.open("../Data/lcn701020_x1dsum.fits")
 #File says that the date obs was 6/14/15 9:12:04
 Data3 = fits.open("../Data/lcn701030_x1dsum.fits")
-
 #------------------------------------------------------------------------------
 #Data Extraction
 #headNa  = DataN[0].header headNb  = DataN[1].header where N is an int; was removed to save space 
-#Headers are to give one more information and details about what is in the Fits files
+#Headers are used to give more information and details about what is in the Fits files
 
 TbData1 = Data1[1].data
 Data1.close()
@@ -137,9 +131,9 @@ y_poly_3=[item[1]for item in Grating_3_polyfitpoints]
 best_fit_poly_1=(polyfit(x_poly_1,y_poly_1,1))
 best_fit_poly_2=(polyfit(x_poly_2,y_poly_2,1))
 best_fit_poly_3=(polyfit(x_poly_3,y_poly_3,1))
-poly_array_1=polyval(best_fit_poly_1, TWL2)
-poly_array_2=polyval(best_fit_poly_2, TWL1)
-poly_array_3=polyval(best_fit_poly_3, TWL3)
+#poly_array_1=polyval(best_fit_poly_1, TWL1) #poly_array contains the polynomial EVALUATED by each x point in the grating.
+#poly_array_2=polyval(best_fit_poly_2, TWL2) #It is NOT used anywhere in the code but is useful if one wants to plot the slope.
+#poly_array_3=polyval(best_fit_poly_3, TWL3)
 
 Normal_TFS1=[]#grating 1
 for i in range(len(TWL1)):
