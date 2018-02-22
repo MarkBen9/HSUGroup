@@ -45,6 +45,12 @@ def remove_zero_error(error):
         else:
             TME1.append(error[i])  
     return TME1
+def remove_small(mylist,threshold):
+    for i in range(0,len(mylist)):
+        if mylist[i]<=threshold:
+            mylist[i]=0
+    return mylist
+        
 #------------------------------------------------------------------------------
 #Fits files Opening
 #File says that the date obs was 6/14/15 7:15:17
@@ -145,6 +151,10 @@ Normal_TFS3=[]#grating 3
 for i in range(len(TWL3)):
     Normal_TFS3.append(TFS3[i]/(best_fit_poly_3[0]*(TWL3[i])+ best_fit_poly_3[1]))
 
+remove_small(Normal_TFS1,0.02)
+remove_small(Normal_TFS2,0.02)
+remove_small(Normal_TFS3,0.02)
+
 TWL1_TWL2= arange(TWL1[0],TWL2[-1],.00997)
 TWL1_TWL2_TWL3= arange(TWL1[0],TWL3[-1],0.0122408)
 
@@ -161,8 +171,20 @@ TME3=remove_zero_error(Ierror3)
         
 Averaged_TFS1_TFS2=[]
 for i in range(0,len(TWL1_TWL2)):
-    if (Iflux2[i]==0 and Iflux1[i]==0).all():
+    if (Iflux1[i]==0 and Iflux2[i]==0).all():
             Averaged_TFS1_TFS2.append(0.0)
+    elif(Iflux1[i]==0 and Iflux2[i]!=0):
+        Averaged_TFS1_TFS2.append(Iflux2[i])
+    elif(Iflux1[i]!=0 and Iflux2[i]==0):
+        Averaged_TFS1_TFS2.append(Iflux1[i])
+        
+    elif(TME1[i]==1 and TME2[i]!=1):
+            Averaged_TFS1_TFS2.append(Iflux2[i])
+    elif(TME1[i]!=1 and TME2[i]==1):
+            Averaged_TFS1_TFS2.append(Iflux1[i])
+    elif(TME1[i]==1 and TME2[i]==1):
+            Averaged_TFS1_TFS2.append(0.0)
+        
     else:      
             weight=(1/TME1[i])
             weight2=(1/TME2[i])
@@ -175,13 +197,13 @@ Iflux_1_2=interp(TWL1_TWL2_TWL3,TWL1_TWL2,Averaged_TFS1_TFS2,left=0,right=0)
 
 Error_TFS1_TFS2=[]
 for i in range(len(TWL1_TWL2)):
-    if (Ierror1[i]!=0 and Ierror2[i]==0).all():
+    if (Ierror1[i]!=1 and Ierror2[i]==1).all():
         Error_TFS1_TFS2.append(Ierror1[i])
-    elif (Ierror1[i]==0 and Ierror2[i]!=0).all():
+    elif (Ierror1[i]==1 and Ierror2[i]!=1).all():
         Error_TFS1_TFS2.append(Ierror2[i])
-    elif (Ierror1[i]==0 and Ierror2[i]==0).all():
-        Error_TFS1_TFS2.append(0.0)            
-    else:#if neither of the error values are zero then take the weighted average of the error values.
+    elif (Ierror1[i]==1 and Ierror2[i]==1).all():
+        Error_TFS1_TFS2.append(1)            
+    else:#if neither of the error values are one then take the weighted average of the error values.
         Error_TFS1_TFS2.append(sqrt((Ierror1[i])**2+(Ierror2[i])**2))   
 
 Ierror_1_2=interp(TWL1_TWL2_TWL3,TWL1_TWL2,Error_TFS1_TFS2,left=0,right=0)
@@ -191,6 +213,18 @@ Averaged_TFS1_TFS2_TFS3=[]
 for i in range(0,len(TWL1_TWL2_TWL3)):  
     if(Iflux_1_2[i]==0 and Iflux3[i]==0):
         Averaged_TFS1_TFS2_TFS3.append(0.0)
+    elif(Iflux_1_2[i]==0 and Iflux3[i]!=0):
+        Averaged_TFS1_TFS2_TFS3.append(Iflux3[i])
+    elif(Iflux_1_2[i]!=0 and Iflux3[i]==0):
+        Averaged_TFS1_TFS2_TFS3.append(Iflux_1_2[i])
+        
+    elif(TME_1_2[i]==1 and TME3[i]!=1):
+            Averaged_TFS1_TFS2_TFS3.append(Iflux3[i])
+    elif(TME_1_2[i]!=1 and TME3[i]==1):
+            Averaged_TFS1_TFS2_TFS3.append(Iflux_1_2[i])
+    elif(TME_1_2[i]==1 and TME3[i]==1):
+            Averaged_TFS1_TFS2_TFS3.append(0.0)
+    
     else:
         weight=(1/TME_1_2[i])
         weight2=(1/TME3[i])
