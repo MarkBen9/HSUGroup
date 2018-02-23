@@ -154,9 +154,8 @@ remove_small(Normal_TFS1,0.02)
 remove_small(Normal_TFS2,0.02)
 remove_small(Normal_TFS3,0.02)
 
-Largest_WL_spacing=0.00962188# The largest Wavelength spacing in the data you are working with. ie the spacing between Wavelength[i+1]-Wavelength[i]
-TWL1_TWL2= arange(TWL1[0],TWL2[-1],Largest_WL_spacing)
-TWL1_TWL2_TWL3= arange(TWL1[0],TWL3[-1],Largest_WL_spacing)
+TWL1_TWL2= arange(TWL1[0],TWL2[-1],.00997)
+TWL1_TWL2_TWL3= arange(TWL1[0],TWL3[-1],0.0122408)
 
 Iflux1=interp(TWL1_TWL2,TWL1,Normal_TFS1,left=0,right=0)
 Ierror1=interp(TWL1_TWL2,TWL1,ER1,left=0,right=0)
