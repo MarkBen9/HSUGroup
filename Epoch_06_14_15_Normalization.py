@@ -50,6 +50,11 @@ def remove_small(mylist,threshold):
         if mylist[i]<=threshold:
             mylist[i]=0
     return mylist
+
+def find_index_from_value(mylist, value):
+    return find_index(mylist,closest_value(mylist,value))
+
+    
         
 #------------------------------------------------------------------------------
 #Fits files Opening
@@ -172,12 +177,88 @@ else:
 TWL1_TWL2= arange(TWL1[0],TWL2[-1],TWL_1_2_STEPSIZE)
 TWL1_TWL2_TWL3= arange(TWL1[0],TWL3[-1],TWL_1_2_3_STEPSIZE)
 
-Iflux1=interp(TWL1_TWL2,TWL1,Normal_TFS1,left=0,right=0)
-Ierror1=interp(TWL1_TWL2,TWL1,ER1,left=0,right=0)
-Iflux2=interp(TWL1_TWL2,TWL2,Normal_TFS2,left=0,right=0)
-Ierror2=interp(TWL1_TWL2,TWL2,ER2,left=0,right=0)
-Iflux3=interp(TWL1_TWL2_TWL3,TWL3,Normal_TFS3,left=0,right=0)
-Ierror3=interp(TWL1_TWL2_TWL3,TWL3,ER3,left=0,right=0)
+CUT_GRATINGS=True
+if( CUT_GRATINGS):# Enter the wavelength of the areas you would like to cut off, or "None"(no quotes)
+    TWL1_Start_Cut=None#Will cut off all values before this 
+    TWL1_End_Cut=None #Will cut off all values after this 
+    TWL2_Start_Cut=1171.6
+    TWL2_End_Cut=None    
+    TWL3_Start_Cut=None
+    TWL3_End_Cut=None
+    
+    if not TWL1_Start_Cut==None:TWL1_Start_Cut_index=find_index_from_value(TWL1,TWL1_Start_Cut)
+    else:
+        TWL1_Start_Cut_index=None
+    if not TWL1_End_Cut==None:  TWL1_End_Cut_index=find_index_from_value(TWL1,TWL1_End_Cut)
+    else:
+        TWL1_End_Cut_index=None
+    if not TWL2_Start_Cut==None:TWL2_Start_Cut_index=find_index_from_value(TWL2,TWL2_Start_Cut)
+    else:
+        TWL2_Start_Cut_index=None
+    if not TWL2_End_Cut==None:  TWL2_End_Cut_index=find_index_from_value(TWL2,TWL2_End_Cut)
+    else:
+        TWL2_End_Cut_index=None
+    if not TWL3_Start_Cut==None:TWL3_Start_Cut_index=find_index_from_value(TWL3,TWL3_Start_Cut)
+    else:
+        TWL3_Start_Cut_index=None
+    if not TWL3_End_Cut==None:  TWL3_End_Cut_index=find_index_from_value(TWL3,TWL3_End_Cut)
+    else:
+        TWL3_End_Cut_index=None
+    Iflux1=interp(TWL1_TWL2,       TWL1[TWL1_Start_Cut_index:TWL1_End_Cut_index],Normal_TFS1[TWL1_Start_Cut_index:TWL1_End_Cut_index],left=0,right=0)
+    Ierror1=interp(TWL1_TWL2,      TWL1[TWL1_Start_Cut_index:TWL1_End_Cut_index],ER1[TWL1_Start_Cut_index:TWL1_End_Cut_index],left=0,right=0)
+    Iflux2=interp(TWL1_TWL2,       TWL2[TWL2_Start_Cut_index:TWL2_End_Cut_index],Normal_TFS2[TWL2_Start_Cut_index:TWL2_End_Cut_index],left=0,right=0)
+    Ierror2=interp(TWL1_TWL2,      TWL2[TWL2_Start_Cut_index:TWL2_End_Cut_index],ER2[TWL2_Start_Cut_index:TWL2_End_Cut_index],left=0,right=0)
+    Iflux3=interp(TWL1_TWL2_TWL3,  TWL3[TWL3_Start_Cut_index:TWL3_End_Cut_index],Normal_TFS3[TWL3_Start_Cut_index:TWL3_End_Cut_index],left=0,right=0)
+    Ierror3=interp(TWL1_TWL2_TWL3, TWL3[TWL3_Start_Cut_index:TWL3_End_Cut_index],ER3[TWL3_Start_Cut_index:TWL3_End_Cut_index],left=0,right=0)
+    
+    if not TWL1_Start_Cut==None and not TWL1_End_Cut==None :
+        for i in range(len(TWL1)):#This Loop removes the cut portion of the flux values you have set, not used in the code but it makes plotting the gratings not show the cut portion
+            if  i<=TWL1_Start_Cut_index:
+                Normal_TFS1[i]=0
+            if i>TWL1_End_Cut_index:
+                Normal_TFS1[i]=0
+    elif not TWL1_Start_Cut==None and TWL1_End_Cut==None:
+        for i in range(TWL1_Start_Cut_index):
+                Normal_TFS1[i]=0
+    elif TWL1_Start_Cut==None and not TWL1_End_Cut==None:
+        for i in range(TWL1_End_Cut_index,len(TWL1)):
+                Normal_TFS1[i]=0
+                
+    if not TWL2_Start_Cut==None and not TWL2_End_Cut==None :
+        for i in range(len(TWL2)):#This Loop removes the cut portion of the flux values you have set, not used in the code but it makes plotting the gratings not show the cut portion
+            if  i<=TWL2_Start_Cut_index:
+                Normal_TFS2[i]=0
+            if i>TWL2_End_Cut_index:
+                Normal_TFS2[i]=0
+    elif not TWL2_Start_Cut==None and TWL2_End_Cut==None:
+        for i in range(TWL2_Start_Cut_index):
+                Normal_TFS2[i]=0
+    elif TWL2_Start_Cut==None and not TWL2_End_Cut==None:
+        for i in range(TWL2_End_Cut_index,len(TWL2)):
+                Normal_TFS2[i]=0
+            
+    if not TWL3_Start_Cut==None and not TWL3_End_Cut==None :
+        for i in range(len(TWL3)):#This Loop removes the cut portion of the flux values you have set, not used in the code but it makes plotting the gratings not show the cut portion
+            if  i<=TWL3_Start_Cut_index:
+                Normal_TFS3[i]=0
+            if i>TWL3_End_Cut_index:
+                Normal_TFS3[i]=0
+    elif not TWL3_Start_Cut==None and TWL3_End_Cut==None:
+        for i in range(TWL3_Start_Cut_index):
+                Normal_TFS3[i]=0
+    elif TWL3_Start_Cut==None and not TWL3_End_Cut==None:
+        for i in range(TWL3_End_Cut_index,len(TWL3)):
+                Normal_TFS3[i]=0
+   
+            
+else:
+    
+    Iflux1=interp(TWL1_TWL2,TWL1,Normal_TFS1,left=0,right=0)
+    Ierror1=interp(TWL1_TWL2,TWL1,ER1,left=0,right=0)
+    Iflux2=interp(TWL1_TWL2,TWL2,Normal_TFS2,left=0,right=0)
+    Ierror2=interp(TWL1_TWL2,TWL2,ER2,left=0,right=0)
+    Iflux3=interp(TWL1_TWL2_TWL3,TWL3,Normal_TFS3,left=0,right=0)
+    Ierror3=interp(TWL1_TWL2_TWL3,TWL3,ER3,left=0,right=0)
 
 TME1=remove_zero_error(Ierror1)
 TME2=remove_zero_error(Ierror2)
