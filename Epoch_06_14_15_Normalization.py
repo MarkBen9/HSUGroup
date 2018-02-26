@@ -50,12 +50,8 @@ def remove_small(mylist,threshold):
         if mylist[i]<=threshold:
             mylist[i]=0
     return mylist
-
 def find_index_from_value(mylist, value):
-    return find_index(mylist,closest_value(mylist,value))
-
-    
-        
+    return find_index(mylist,closest_value(mylist,value))   
 #------------------------------------------------------------------------------
 #Fits files Opening
 #File says that the date obs was 6/14/15 7:15:17
@@ -204,6 +200,7 @@ if( CUT_GRATINGS):# Enter the wavelength of the areas you would like to cut off,
     if not TWL3_End_Cut==None:  TWL3_End_Cut_index=find_index_from_value(TWL3,TWL3_End_Cut)
     else:
         TWL3_End_Cut_index=None
+        
     Iflux1=interp(TWL1_TWL2,       TWL1[TWL1_Start_Cut_index:TWL1_End_Cut_index],Normal_TFS1[TWL1_Start_Cut_index:TWL1_End_Cut_index],left=0,right=0)
     Ierror1=interp(TWL1_TWL2,      TWL1[TWL1_Start_Cut_index:TWL1_End_Cut_index],ER1[TWL1_Start_Cut_index:TWL1_End_Cut_index],left=0,right=0)
     Iflux2=interp(TWL1_TWL2,       TWL2[TWL2_Start_Cut_index:TWL2_End_Cut_index],Normal_TFS2[TWL2_Start_Cut_index:TWL2_End_Cut_index],left=0,right=0)
