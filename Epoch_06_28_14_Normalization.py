@@ -178,7 +178,8 @@ if( CUT_GRATINGS):# Enter the wavelength of the areas you would like to cut off,
     TWL1_Start_Cut=None#Will cut off all values before this 
     TWL1_End_Cut=None #Will cut off all values after this 
     TWL2_Start_Cut=1171.6
-    TWL2_End_Cut=1470    
+    #TWL2_End_Cut=None
+    TWL2_End_Cut=1467.14    
     TWL3_Start_Cut=1390.9
     TWL3_End_Cut=None
     
