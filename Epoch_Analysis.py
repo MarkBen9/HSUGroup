@@ -18,69 +18,43 @@ from numpy import polyfit
 from numpy import polyval
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
-
+import matplotlib.style as style
+style.use('dark_background')
 
 import Epoch_06_1_14_Normalization
 import Epoch_06_12_14_Normalization
 import Epoch_06_28_14_Normalization
 import Epoch_06_14_15_Normalization
 
+EPOCH_LIST=[Epoch_06_1_14_Normalization,
+            Epoch_06_12_14_Normalization,
+            Epoch_06_28_14_Normalization,
+            Epoch_06_14_15_Normalization]
 
-Start_WL=900
-End_WL=1800
-Step_WL=25
+EPOCH=EPOCH_LIST[3]
 
-Current_WL=Start_WL
-for i in range((End_WL-Start_WL)//Step_WL):
-    plt.figure(1)
-    plt.title('Normalized Epoch 6/1/14, 6/12/14, 6/28/14 and 6/14/15  ')
-    plt.xlabel(r'Observed Wavelength ($\AA$)')
-    plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-    plt.axhline(y=1,color='orange')
-#    plt.plot(Epoch_06_1_14_Normalization.Final_x_spectrum,Epoch_06_1_14_Normalization.Final_y_spectrum,zorder=0,c='blue')
-#    plt.plot(Epoch_06_12_14_Normalization.Final_x_spectrum,Epoch_06_12_14_Normalization.Final_y_spectrum,zorder=0,c='orange')
-#    plt.plot(Epoch_06_28_14_Normalization.Final_x_spectrum,Epoch_06_28_14_Normalization.Final_y_spectrum,zorder=0,c='green')
-#    plt.plot(Epoch_06_14_15_Normalization.Final_x_spectrum,Epoch_06_14_15_Normalization.Final_y_spectrum,zorder=0,c='red')
-    plt.plot(Epoch_06_14_15_Normalization.TWL1,Epoch_06_14_15_Normalization.Normal_TFS1,zorder=0,c='blue')
-    plt.plot(Epoch_06_14_15_Normalization.TWL2,Epoch_06_14_15_Normalization.Normal_TFS2,zorder=0,c='orange')
-    plt.plot(Epoch_06_14_15_Normalization.TWL3,Epoch_06_14_15_Normalization.Normal_TFS3,zorder=0,c='red')
+plt.figure(1)
+plt.title(' ')
+plt.xlabel(r'Observed Wavelength ($\AA$)')
+plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
+plt.axhline(y=1,color='grey')
+
+plt.plot(EPOCH.TWL1,EPOCH.Normal_TFS1,zorder=0,c='magenta',linewidth=1)
+plt.plot(EPOCH.TWL2,EPOCH.Normal_TFS2,zorder=0,c='blue',linewidth=1)
+plt.plot(EPOCH.TWL3,EPOCH.Normal_TFS3,zorder=0,c='red',linewidth=1)
+plt.plot(EPOCH.Final_x_spectrum,EPOCH.Final_y_spectrum,zorder=0,c='green',linewidth=2)
+
+Grating1050=mpatches.Patch(color='magenta', label='Grating 1050')
+Grating1319=mpatches.Patch(color='blue', label='Grating 1319')
+Grating1572=mpatches.Patch(color='red', label='Grating 1572')
+Full_Spectrum=mpatches.Patch(color='green',label='Full Spectrum')
+plt.legend(handles=[Grating1050,Grating1319,Grating1572,Full_Spectrum])
+plt.axis([1000,1800,0,3])
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(13.5, 10.5)
+
+
     
-    plt.plot(Epoch_06_14_15_Normalization.Final_x_spectrum,Epoch_06_14_15_Normalization.Final_y_spectrum,zorder=0,c='green')
-#    Epoch_06_1_14 = mpatches.Patch(color='blue', label='Epoch_06_1_14')
-#    Epoch_06_12_14=mpatches.Patch(color='orange', label='Epoch_06_12_14')
-#    Epoch_06_28_14=mpatches.Patch(color='green', label='Epoch_06_28_14')
-#    Epoch_06_14_15=mpatches.Patch(color='red', label='Epoch_06_14_15')
-#    plt.legend(handles=[Epoch_06_1_14,Epoch_06_12_14,Epoch_06_28_14,Epoch_06_14_15])
-    plt.axis([Current_WL,Current_WL+Step_WL,0,3])
-    fig = matplotlib.pyplot.gcf()
-    fig.set_size_inches(13.5, 10.5)
-    
-    savefig('C:/Users/micha/Google Drive/Documents/Research/Plots/%s-%s'%(Current_WL,Current_WL+Step_WL))
-    Current_WL=Current_WL+Step_WL
-    
-#plt.figure(1)
-#plt.title('Normalized Epoch 6/1/14, 6/12/14, 6/28/14 and 6/14/15  ')
-#plt.xlabel(r'Observed Wavelength ($\AA$)')
-#plt.ylabel('Flux (erg/s/cm^2/$\AA$)')
-#plt.axhline(y=1,color='orange')
-#plt.plot(Epoch_06_1_14_Normalization.Final_x_spectrum,Epoch_06_1_14_Normalization.Final_y_spectrum,zorder=0,c='blue')
-#plt.plot(Epoch_06_12_14_Normalization.Final_x_spectrum,Epoch_06_12_14_Normalization.Final_y_spectrum,zorder=0,c='orange')
-#plt.plot(Epoch_06_28_14_Normalization.Final_x_spectrum,Epoch_06_28_14_Normalization.Final_y_spectrum,zorder=0,c='green')
-#
-#plt.plot(Epoch_06_14_15_Normalization.TWL1,Epoch_06_14_15_Normalization.Normal_TFS1,zorder=0,c='blue')
-#plt.plot(Epoch_06_14_15_Normalization.TWL2,Epoch_06_14_15_Normalization.Normal_TFS2,zorder=0,c='orange')
-#plt.plot(Epoch_06_14_15_Normalization.TWL3,Epoch_06_14_15_Normalization.Normal_TFS3,zorder=0,c='red')
-#
-#plt.plot(Epoch_06_14_15_Normalization.Final_x_spectrum,Epoch_06_14_15_Normalization.Final_y_spectrum,zorder=0,c='green')
-#
-#Epoch_06_1_14 = mpatches.Patch(color='blue', label='Epoch_06_1_14')
-#Epoch_06_12_14=mpatches.Patch(color='orange', label='Epoch_06_12_14')
-#Epoch_06_28_14=mpatches.Patch(color='green', label='Epoch_06_28_14')
-#Epoch_06_14_15=mpatches.Patch(color='red', label='Epoch_06_14_15')
-#plt.legend(handles=[Epoch_06_1_14,Epoch_06_12_14,Epoch_06_28_14,Epoch_06_14_15])
-#plt.axis([1000,1174,0,1.5])
-#fig = matplotlib.pyplot.gcf()
-#fig.set_size_inches(13.5, 10.5) 
 
 
     
