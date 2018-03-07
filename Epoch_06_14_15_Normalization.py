@@ -16,6 +16,7 @@ from numpy import convolve
 import matplotlib.patches as mpatches
 from numpy import polyfit
 from numpy import polyval
+#------------------------------------------------------------------------------
 def badpix(list_name,xmin_indice,xmax_indice,replace_val):
     for i in range(xmin_indice,xmax_indice):
         list_name[i]=replace_val
@@ -64,14 +65,12 @@ Data3 = fits.open("../Data/lcn701030_x1dsum.fits")
 #Data Extraction
 #headNa  = DataN[0].header headNb  = DataN[1].header where N is an int; was removed to save space 
 #Headers are used to give more information and details about what is in the Fits files
-
 TbData1 = Data1[1].data
 Data1.close()
 TbData2 = Data2[1].data
 Data2.close()
 TbData3 = Data3[1].data
 Data3.close()
-
 #------------------------------------------------------------------------------
 wavelength1=TbData1['wavelength']
 flux1=TbData1['flux']
@@ -108,8 +107,7 @@ badpix(TF2,5180,5405,0)
 TFS1=smooth(TF1,20)
 TFS2=smooth(TF2,20)
 TFS3=smooth(TF3,20)
-###############################################################################
-###############################################################################
+#------------------------------------------------------------------------------
 Grating_1_polyfitpoints=[
                          make_polyfit_point(TWL1,TFS1,1110,1130),
                          make_polyfit_point(TWL1,TFS1,1150,1190)
@@ -126,9 +124,7 @@ Grating_3_polyfitpoints=[make_polyfit_point(TWL3,TFS3,1425,1460),
 
 # For different epochs, input different ranges that represent the continuum. 
 #That should be it.
-
-###############################################################################
-###############################################################################
+#------------------------------------------------------------------------------
 x_poly_1=[item[0]for item in Grating_1_polyfitpoints]
 y_poly_1=[item[1]for item in Grating_1_polyfitpoints]
 x_poly_2=[item[0]for item in Grating_2_polyfitpoints]
@@ -141,16 +137,52 @@ best_fit_poly_3=(polyfit(x_poly_3,y_poly_3,1))
 #poly_array_1=polyval(best_fit_poly_1, TWL1) #poly_array contains the polynomial EVALUATED by each x point in the grating.
 #poly_array_2=polyval(best_fit_poly_2, TWL2) #It is NOT used anywhere in the code but is useful if one wants to plot the slope.
 #poly_array_3=polyval(best_fit_poly_3, TWL3)
-
+#------------------------------------------------------------------------------
+#Second Order poly fit point selection
+Grating_1_2ndOrderPolyfit_Points=[  make_polyfit_point(TWL1,TFS1,1174.4,1175.4),
+                                    make_polyfit_point(TWL1,TFS1,1191.2,1192.4),
+                                    make_polyfit_point(TWL1,TFS1,1194.3,1196.0),
+                                    make_polyfit_point(TWL1,TFS1,1184.0,1186.0),
+                                    make_polyfit_point(TWL1,TFS1,1181.0,1182.0)]
+Grating_2_2ndOrderPolyfit_Points=[  make_polyfit_point(TWL2,TFS2,1174.4,1175.4),
+                                    make_polyfit_point(TWL2,TFS2,1191.2,1192.4),
+                                    make_polyfit_point(TWL2,TFS2,1194.3,1196.0),
+                                    make_polyfit_point(TWL2,TFS2,1184.0,1186.0),
+                                    make_polyfit_point(TWL2,TFS2,1181.0,1182.0),
+                                    make_polyfit_point(TWL2,TFS2,1204.0,1205.0)]
+#------------------------------------------------------------------------------
+#Second Order Polynomial fit built                                    
+x_2ndpoly_1=[item[0]for item in Grating_1_2ndOrderPolyfit_Points]
+y_2ndpoly_1=[item[1]for item in Grating_1_2ndOrderPolyfit_Points]
+x_2ndpoly_2=[item[0]for item in Grating_2_2ndOrderPolyfit_Points]
+y_2ndpoly_2=[item[1]for item in Grating_2_2ndOrderPolyfit_Points]
+best_fit_2ndpoly_1=(polyfit(x_2ndpoly_1,y_2ndpoly_1,2))
+best_fit_2ndpoly_2=(polyfit(x_2ndpoly_2,y_2ndpoly_2,2))
+#------------------------------------------------------------------------------
 Normal_TFS1=[]#grating 1
-for i in range(len(TWL1)):
+#Might need to brake this into two polyfits 
+#From mathmatica, the polynomial intersects around 1167.21m, 28666
+#Remember to change this every time
+for i in range(0,find_index(TWL1,closest_value(TWL1,1167.21))):
+    #First part First order poly
     Normal_TFS1.append(TFS1[i]/(best_fit_poly_1[0]*(TWL1[i])+ best_fit_poly_1[1]))
+for i in range(find_index(TWL1,closest_value(TWL1,1167.21)),len(TWL1)):
+    #Second part, Second order poly
+    Normal_TFS1.append(TFS1[i]/(best_fit_2ndpoly_1[0]*(TWL1[i])**2+ best_fit_2ndpoly_1[1]*(TWL1[i])+ best_fit_2ndpoly_1[2]))
+
 Normal_TFS2=[]#grating 2
-for i in range(len(TWL2)):
+#Will have to brake this into two poly fits 5227
+for i in range(0,find_index(TWL2,closest_value(TWL2,1215))):
+    #First part is a second order polynomial
+    Normal_TFS2.append(TFS2[i]/(best_fit_2ndpoly_2[0]*(TWL2[i])**2+ best_fit_2ndpoly_2[1]*(TWL2[i])+ best_fit_2ndpoly_2[2]))
+for i in range(find_index(TWL2,closest_value(TWL2,1215)),len(TWL2)):
+    #Second part is a poly nomial
     Normal_TFS2.append(TFS2[i]/(best_fit_poly_2[0]*(TWL2[i])+ best_fit_poly_2[1]))
+
 Normal_TFS3=[]#grating 3
 for i in range(len(TWL3)):
     Normal_TFS3.append(TFS3[i]/(best_fit_poly_3[0]*(TWL3[i])+ best_fit_poly_3[1]))
+#------------------------------------------------------------------------------
 
 remove_small(Normal_TFS1,0.02)
 remove_small(Normal_TFS2,0.02)
