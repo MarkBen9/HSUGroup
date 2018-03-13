@@ -16,6 +16,7 @@ from numpy import convolve
 import matplotlib.patches as mpatches
 from numpy import polyfit
 from numpy import polyval
+#------------------------------------------------------------------------------
 def badpix(list_name,xmin_indice,xmax_indice,replace_val):
     for i in range(xmin_indice,xmax_indice):
         list_name[i]=replace_val
@@ -110,8 +111,9 @@ TFS2=smooth(TF2,20)
 TFS3=smooth(TF3,20)
 #------------------------------------------------------------------------------
 Grating_1_polyfitpoints=[
-                         make_polyfit_point(TWL1,TFS1,1110,1130),
-                         make_polyfit_point(TWL1,TFS1,1150,1190)
+                         make_polyfit_point(TWL1,TFS1,1119,1121),
+                         make_polyfit_point(TWL1,TFS1,1165,1175),
+                         make_polyfit_point(TWL1,TFS1,1147,1152)
                          ]
 Grating_2_polyfitpoints=[make_polyfit_point(TWL2,TFS2,1175,1185),
                          make_polyfit_point(TWL2,TFS2,1345,1365),
@@ -163,10 +165,10 @@ Normal_TFS1=[]#grating 1
 #Might need to brake this into two polyfits 
 #From mathmatica, the polynomial intersects around 1167.21m, 28666
 #Remember to change this every time
-for i in range(0,find_index(TWL1,closest_value(TWL1,1170.04))):
+for i in range(0,find_index(TWL1,closest_value(TWL1,1169.92))):
     #First part First order poly
     Normal_TFS1.append(TFS1[i]/(best_fit_poly_1[0]*(TWL1[i])+ best_fit_poly_1[1]))
-for i in range(find_index(TWL1,closest_value(TWL1,1170.04)),len(TWL1)):
+for i in range(find_index(TWL1,closest_value(TWL1,1169.62)),len(TWL1)):
     #Second part, Second order poly
     Normal_TFS1.append(TFS1[i]/(best_fit_2ndpoly_1[0]*(TWL1[i])**2+ best_fit_2ndpoly_1[1]*(TWL1[i])+ best_fit_2ndpoly_1[2]))
 
