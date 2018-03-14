@@ -164,7 +164,7 @@ best_fit_2ndpoly_2=(polyfit(x_2ndpoly_2,y_2ndpoly_2,2))
 #------------------------------------------------------------------------------
 Normal_TFS1=[]#grating 1
 #Might need to brake this into two polyfits 
-#From mathmatica, the polynomial intersects around 1167.21m, 28666
+#From mathmatica, the polynomial intersects around 1175.06 and 1201.29
 #Remember to change this every time
 for i in range(0,find_index(TWL1,closest_value(TWL1,1175.06))):
     #First part First order poly
@@ -175,10 +175,10 @@ for i in range(find_index(TWL1,closest_value(TWL1,1175.06)),len(TWL1)):
 
 Normal_TFS2=[]#grating 2
 #Will have to brake this into two poly fits 5227
-for i in range(0,find_index(TWL2,closest_value(TWL2,1215))):
+for i in range(0,find_index(TWL2,closest_value(TWL2,1201.29))):
     #First part is a second order polynomial
     Normal_TFS2.append(TFS2[i]/(best_fit_2ndpoly_2[0]*(TWL2[i])**2+ best_fit_2ndpoly_2[1]*(TWL2[i])+ best_fit_2ndpoly_2[2]))
-for i in range(find_index(TWL2,closest_value(TWL2,1215)),len(TWL2)):
+for i in range(find_index(TWL2,closest_value(TWL2,1201.29)),len(TWL2)):
     #Second part is a poly nomial
     Normal_TFS2.append(TFS2[i]/(best_fit_poly_2[0]*(TWL2[i])+ best_fit_poly_2[1]))
 
