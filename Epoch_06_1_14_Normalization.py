@@ -16,6 +16,7 @@ from numpy import convolve
 import matplotlib.patches as mpatches
 from numpy import polyfit
 from numpy import polyval
+#------------------------------------------------------------------------------
 def badpix(list_name,xmin_indice,xmax_indice,replace_val):
     for i in range(xmin_indice,xmax_indice):
         list_name[i]=replace_val
@@ -109,20 +110,17 @@ TFS1=smooth(TF1,20)
 TFS2=smooth(TF2,20)
 TFS3=smooth(TF3,20)
 #------------------------------------------------------------------------------
-Grating_1_polyfitpoints=[
-                         make_polyfit_point(TWL1,TFS1,1110,1130),
-                         make_polyfit_point(TWL1,TFS1,1150,1190)
-                         ]
-Grating_2_polyfitpoints=[make_polyfit_point(TWL2,TFS2,1175,1185),
-                         make_polyfit_point(TWL2,TFS2,1345,1365),
+Grating_1_polyfitpoints=[make_polyfit_point(TWL1,TFS1,1119,1121),
+                         make_polyfit_point(TWL1,TFS1,1165,1175),
+                         make_polyfit_point(TWL1,TFS1,1147,1152)]
+Grating_2_polyfitpoints=[make_polyfit_point(TWL2,TFS2,1178,1182),
+                         make_polyfit_point(TWL2,TFS2,1350,1360),
                          make_polyfit_point(TWL2,TFS2,1395,1402),
-                         make_polyfit_point(TWL2,TFS2,1420,1460)
-                         ]
+                         make_polyfit_point(TWL2,TFS2,1435,1445)]
 Grating_3_polyfitpoints=[make_polyfit_point(TWL3,TFS3,1425,1460),
                          make_polyfit_point(TWL3,TFS3,1500,1525),
                          make_polyfit_point(TWL3,TFS3,1590,1605),
                          make_polyfit_point(TWL3,TFS3,1675,1720)]
-
 # For different epochs, input different ranges that represent the continuum. 
 #That should be it.
 #------------------------------------------------------------------------------
@@ -135,9 +133,6 @@ y_poly_3=[item[1]for item in Grating_3_polyfitpoints]
 best_fit_poly_1=(polyfit(x_poly_1,y_poly_1,1))
 best_fit_poly_2=(polyfit(x_poly_2,y_poly_2,1))
 best_fit_poly_3=(polyfit(x_poly_3,y_poly_3,1))
-#poly_array_1=polyval(best_fit_poly_1, TWL1) #poly_array contains the polynomial EVALUATED by each x point in the grating.
-#poly_array_2=polyval(best_fit_poly_2, TWL2) #It is NOT used anywhere in the code but is useful if one wants to plot the slope.
-#poly_array_3=polyval(best_fit_poly_3, TWL3)
 #------------------------------------------------------------------------------
 Grating_1_2ndOrderPolyfit_Points=[  make_polyfit_point(TWL1,TFS1,1174.4,1175.4),
                                     make_polyfit_point(TWL1,TFS1,1191.2,1192.4),
@@ -161,21 +156,21 @@ best_fit_2ndpoly_2=(polyfit(x_2ndpoly_2,y_2ndpoly_2,2))
 #------------------------------------------------------------------------------
 Normal_TFS1=[]#grating 1
 #Might need to brake this into two polyfits 
-#From mathmatica, the polynomial intersects around 1167.21m, 28666
+#From mathmatica, the polynomial intersects around 1169.92 and 1201.37
 #Remember to change this every time
-for i in range(0,find_index(TWL1,closest_value(TWL1,1170.04))):
+for i in range(0,find_index(TWL1,closest_value(TWL1,1169.92))):
     #First part First order poly
     Normal_TFS1.append(TFS1[i]/(best_fit_poly_1[0]*(TWL1[i])+ best_fit_poly_1[1]))
-for i in range(find_index(TWL1,closest_value(TWL1,1170.04)),len(TWL1)):
+for i in range(find_index(TWL1,closest_value(TWL1,1169.92)),len(TWL1)):
     #Second part, Second order poly
     Normal_TFS1.append(TFS1[i]/(best_fit_2ndpoly_1[0]*(TWL1[i])**2+ best_fit_2ndpoly_1[1]*(TWL1[i])+ best_fit_2ndpoly_1[2]))
 
 Normal_TFS2=[]#grating 2
 #Will have to brake this into two poly fits 5227
-for i in range(0,find_index(TWL2,closest_value(TWL2,1215))):
+for i in range(0,find_index(TWL2,closest_value(TWL2,1201.29))):
     #First part is a second order polynomial
     Normal_TFS2.append(TFS2[i]/(best_fit_2ndpoly_2[0]*(TWL2[i])**2+ best_fit_2ndpoly_2[1]*(TWL2[i])+ best_fit_2ndpoly_2[2]))
-for i in range(find_index(TWL2,closest_value(TWL2,1215)),len(TWL2)):
+for i in range(find_index(TWL2,closest_value(TWL2,1201.29)),len(TWL2)):
     #Second part is a poly nomial
     Normal_TFS2.append(TFS2[i]/(best_fit_poly_2[0]*(TWL2[i])+ best_fit_poly_2[1]))
 
