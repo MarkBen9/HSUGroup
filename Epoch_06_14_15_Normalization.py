@@ -111,15 +111,14 @@ TFS3=smooth(TF3,20)
 Grating_1_polyfitpoints=[make_polyfit_point(TWL1,TFS1,1119,1121),
                          make_polyfit_point(TWL1,TFS1,1165,1175),
                          make_polyfit_point(TWL1,TFS1,1147,1152)]
-Grating_2_polyfitpoints=[make_polyfit_point(TWL2,TFS2,1175,1185),
-                         make_polyfit_point(TWL2,TFS2,1345,1365),
+Grating_2_polyfitpoints=[make_polyfit_point(TWL2,TFS2,1178,1182),
+                         make_polyfit_point(TWL2,TFS2,1350,1360),
                          make_polyfit_point(TWL2,TFS2,1395,1402),
-                         make_polyfit_point(TWL2,TFS2,1420,1460)]
+                         make_polyfit_point(TWL2,TFS2,1435,1445)]
 Grating_3_polyfitpoints=[make_polyfit_point(TWL3,TFS3,1425,1460),
                          make_polyfit_point(TWL3,TFS3,1500,1525),
                          make_polyfit_point(TWL3,TFS3,1590,1605),
                          make_polyfit_point(TWL3,TFS3,1675,1720)]
-
 # For different epochs, input different ranges that represent the continuum. 
 #That should be it.
 #------------------------------------------------------------------------------
