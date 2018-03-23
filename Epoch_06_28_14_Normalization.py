@@ -109,21 +109,17 @@ TFS1=smooth(TF1,20)
 TFS2=smooth(TF2,20)
 TFS3=smooth(TF3,20)
 #------------------------------------------------------------------------------
-Grating_1_polyfitpoints=[
-                         make_polyfit_point(TWL1,TFS1,1119,1121),
+Grating_1_polyfitpoints=[make_polyfit_point(TWL1,TFS1,1119,1121),
                          make_polyfit_point(TWL1,TFS1,1165,1175),
-                         make_polyfit_point(TWL1,TFS1,1147,1152)
-                         ]
-Grating_2_polyfitpoints=[make_polyfit_point(TWL2,TFS2,1175,1185),
-                         make_polyfit_point(TWL2,TFS2,1345,1365),
+                         make_polyfit_point(TWL1,TFS1,1147,1152)]
+Grating_2_polyfitpoints=[make_polyfit_point(TWL2,TFS2,1178,1182),
+                         make_polyfit_point(TWL2,TFS2,1350,1360),
                          make_polyfit_point(TWL2,TFS2,1395,1402),
-                         make_polyfit_point(TWL2,TFS2,1420,1460)
-                         ]
+                         make_polyfit_point(TWL2,TFS2,1435,1445)]
 Grating_3_polyfitpoints=[make_polyfit_point(TWL3,TFS3,1425,1460),
                          make_polyfit_point(TWL3,TFS3,1500,1525),
                          make_polyfit_point(TWL3,TFS3,1590,1605),
                          make_polyfit_point(TWL3,TFS3,1675,1720)]
-
 # For different epochs, input different ranges that represent the continuum. 
 #That should be it.
 #------------------------------------------------------------------------------
@@ -174,10 +170,10 @@ for i in range(find_index(TWL1,closest_value(TWL1,1172.14)),len(TWL1)):
 
 Normal_TFS2=[]#grating 2
 #Will have to brake this into two poly fits 5227
-for i in range(0,find_index(TWL2,closest_value(TWL2,1200.85))):
+for i in range(0,find_index(TWL2,closest_value(TWL2,1200.91))):
     #First part is a second order polynomial
     Normal_TFS2.append(TFS2[i]/(best_fit_2ndpoly_2[0]*(TWL2[i])**2+ best_fit_2ndpoly_2[1]*(TWL2[i])+ best_fit_2ndpoly_2[2]))
-for i in range(find_index(TWL2,closest_value(TWL2,1200.85)),len(TWL2)):
+for i in range(find_index(TWL2,closest_value(TWL2,1200.91)),len(TWL2)):
     #Second part is a poly nomial
     Normal_TFS2.append(TFS2[i]/(best_fit_poly_2[0]*(TWL2[i])+ best_fit_poly_2[1]))
 
