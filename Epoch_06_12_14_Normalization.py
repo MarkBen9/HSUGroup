@@ -373,6 +373,17 @@ for i in range(0,len(TWL1_TWL2_TWL3)):
         spec=Iflux_1_2[i]
         spec2=Iflux3[i]
         Averaged_TFS1_TFS2_TFS3.append((weight*spec+weight2*spec2)/(weight+weight2))
+Error_TFS1_TFS2_TFS3=[]
+for i in range(len(TWL1_TWL2)):
+    if (Ierror_1_2[i]!=1 and Ierror3[i]==1).all():
+        Error_TFS1_TFS2_TFS3.append(Ierror_1_2[i])
+    elif (Ierror_1_2[i]==1 and Ierror3[i]!=1).all():
+        Error_TFS1_TFS2_TFS3.append(Ierror3[i])
+    elif (Ierror_1_2[i]==1 and Ierror3[i]==1).all():
+        Error_TFS1_TFS2_TFS3.append(1)            
+    else:#if neither of the error values are one then take the weighted average of the error values.
+        Error_TFS1_TFS2_TFS3.append(sqrt((Ierror_1_2[i])**2+(Ierror3[i])**2))  
 
+Final_e_spectrum=Error_TFS1_TFS2_TFS3
 Final_x_spectrum=TWL1_TWL2_TWL3
 Final_y_spectrum=Averaged_TFS1_TFS2_TFS3
