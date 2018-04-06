@@ -1,25 +1,26 @@
+import os
 from pylab import * 
-from numpy import *
+from scipy.interpolate import interp1d
+from scipy.interpolate import UnivariateSpline
 from astropy.io import fits
 from PIL import Image
+from numpy import *
 from numpy import concatenate
 from numpy import interp
 from numpy import set_printoptions
 from numpy import arange 
 from numpy import nan
-import matplotlib.pyplot as plt
-import os
-import matplotlib.ticker as mtick
+from numpy import polyval
+from numpy import polyfit
 from numpy import sqrt
 from numpy import ones
 from numpy import convolve
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 import matplotlib.patches as mpatches
-from numpy import polyfit
-from numpy import polyval
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import matplotlib.style as style
-from astropy.io import fits
 style.use('dark_background')
 #------------------------------------------------------------------------------
 #Initializing
@@ -99,9 +100,10 @@ for i in range(find_index(Si_Spect_WL,closest_value(Si_Spect_WL,1467.6059)),len(
 #------------------------------------------------------------------------------
     #Carbon
     
-PreNormalizedSI_FX=Epoch_06_1_14_FLUX[find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1600)):find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1680))]
+PreNormalizedCIV_FX=Epoch_06_1_14_FLUX[find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1600)):find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1680))]
 CIV_Spect_WL=arange(1600,1680,0.012234810431436927)
 
+#nEED to create more points
 CIV_Polyfit_Points=[make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1637.6,1637.9),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1639.6,1640.1),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1643.7,1643.9),
@@ -109,20 +111,21 @@ CIV_Polyfit_Points=[make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,163
 
 x_poly_1=[item[0]for item in CIV_Polyfit_Points]
 y_poly_1=[item[1]for item in CIV_Polyfit_Points]
-
-best_fit_poly_1=(polyfit(x_poly_1,y_poly_1,2))
+#splinesInt is a function i.e. f(x_wavelength)
+splinesInt=interp1d(x_poly_1,y_poly_1,kind = 'cubic', bounds_error = False)
 
 #for Graphical purposes, and plotting only, Has no coding
 xping=arange(Epoch_06_1_14_WAVE[0],Epoch_06_1_14_WAVE[-1],.05)
-yping=[]
-for i in range(len(xping)):
-   yping.append(best_fit_poly_1[0]*(xping[i])**2+ best_fit_poly_1[1]*(xping[i])+best_fit_poly_1[2])
+
 
 CIV_Spect_FX=[]
 CIV_Spect_WL=arange(1615,1650,0.012234810431436927)
+#Will be changed soon to spline method
+"""
 for i in range(0,find_index(CIV_Spect_WL,closest_value(CIV_Spect_WL,1636.23))):
     #First part First order poly
     CIV_Spect_FX.append(Epoch_06_1_14_FLUX[find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1615))+i])
 for i in range(find_index(CIV_Spect_WL,closest_value(CIV_Spect_WL,1636.23)),len(CIV_Spect_WL)):
     #First part First order poly
     CIV_Spect_FX.append((Epoch_06_1_14_FLUX[find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1615))+i])/(best_fit_poly_1[0]*(CIV_Spect_WL[i])**2+ best_fit_poly_1[1]*(CIV_Spect_WL[i])+best_fit_poly_1[2]))
+    """
