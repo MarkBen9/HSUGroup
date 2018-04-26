@@ -111,8 +111,9 @@ TFS2=smooth(TF2,20)
 TFS3=smooth(TF3,20)
 #------------------------------------------------------------------------------
 Grating_1_polyfitpoints=[make_polyfit_point(TWL1,TFS1,1119,1121),
-                         make_polyfit_point(TWL1,TFS1,1165,1175),
-                         make_polyfit_point(TWL1,TFS1,1147,1152)]
+                         #make_polyfit_point(TWL1,TFS1,1165,1175),
+                         #make_polyfit_point(TWL1,TFS1,1147,1152)]
+                         make_polyfit_point(TWL1,TFS1,1160,1161)]
 Grating_2_polyfitpoints=[make_polyfit_point(TWL2,TFS2,1178,1182),
                          make_polyfit_point(TWL2,TFS2,1350,1360),
                          make_polyfit_point(TWL2,TFS2,1395,1402),
@@ -122,7 +123,6 @@ Grating_3_polyfitpoints=[make_polyfit_point(TWL3,TFS3,1425,1460),
                          make_polyfit_point(TWL3,TFS3,1590,1605),
                          make_polyfit_point(TWL3,TFS3,1675,1720)]
 # For different epochs, input different ranges that represent the continuum. 
-#That should be it.
 #------------------------------------------------------------------------------
 x_poly_1=[item[0]for item in Grating_1_polyfitpoints]
 y_poly_1=[item[1]for item in Grating_1_polyfitpoints]
@@ -133,6 +133,22 @@ y_poly_3=[item[1]for item in Grating_3_polyfitpoints]
 best_fit_poly_1=(polyfit(x_poly_1,y_poly_1,1))
 best_fit_poly_2=(polyfit(x_poly_2,y_poly_2,1))
 best_fit_poly_3=(polyfit(x_poly_3,y_poly_3,1))
+#------------------------------------------------------------------------------
+#Graphical Tool
+xping1=arange(TWL1[0],TWL1[-1],.05)
+yping1=[]
+for i in range(len(xping1)):
+    yping1.append(best_fit_poly_1[0]*(xping1[i])+ best_fit_poly_1[1])
+
+xping2=arange(TWL2[0],TWL2[-1],.05)
+yping2=[]
+for i in range(len(xping2)):
+    yping2.append(best_fit_poly_2[0]*(xping2[i])+ best_fit_poly_2[1])
+
+xping3=arange(TWL3[0],TWL3[-1],.05)
+yping3=[]
+for i in range(len(xping3)):
+    yping3.append(best_fit_poly_3[0]*(xping3[i])+ best_fit_poly_3[1])
 #------------------------------------------------------------------------------
 Grating_1_2ndOrderPolyfit_Points=[  make_polyfit_point(TWL1,TFS1,1174.4,1175.4),
                                     make_polyfit_point(TWL1,TFS1,1191.2,1192.4),
