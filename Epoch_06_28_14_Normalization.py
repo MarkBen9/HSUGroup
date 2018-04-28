@@ -109,9 +109,11 @@ TFS1=smooth(TF1,20)
 TFS2=smooth(TF2,20)
 TFS3=smooth(TF3,20)
 #------------------------------------------------------------------------------
-Grating_1_polyfitpoints=[make_polyfit_point(TWL1,TFS1,1119,1121),
-                         make_polyfit_point(TWL1,TFS1,1165,1175),
-                         make_polyfit_point(TWL1,TFS1,1147,1152)]
+Grating_1_polyfitpoints=[make_polyfit_point(TWL1,TFS1,1118,1121),
+                         #make_polyfit_point(TWL1,TFS1,1119,1121),
+                         make_polyfit_point(TWL1,TFS1,1160,1161)]
+#                         make_polyfit_point(TWL1,TFS1,1165,1175),
+#                         make_polyfit_point(TWL1,TFS1,1147,1152)]
 Grating_2_polyfitpoints=[make_polyfit_point(TWL2,TFS2,1178,1182),
                          make_polyfit_point(TWL2,TFS2,1350,1360),
                          make_polyfit_point(TWL2,TFS2,1395,1402),
