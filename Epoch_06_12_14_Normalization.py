@@ -163,10 +163,10 @@ Normal_TFS1=[]#grating 1
 #Might need to brake this into two polyfits 
 #From mathmatica, the polynomial intersects around 1175.06 and 1201.29
 #Remember to change this every time
-for i in range(0,find_index(TWL1,closest_value(TWL1,1175.06))):
+for i in range(0,find_index(TWL1,closest_value(TWL1,1169.00))):
     #First part First order poly
     Normal_TFS1.append(TFS1[i]/(best_fit_poly_1[0]*(TWL1[i])+ best_fit_poly_1[1]))
-for i in range(find_index(TWL1,closest_value(TWL1,1175.06)),len(TWL1)):
+for i in range(find_index(TWL1,closest_value(TWL1,1169.00)),len(TWL1)):
     #Second part, Second order poly
     Normal_TFS1.append(TFS1[i]/(best_fit_2ndpoly_1[0]*(TWL1[i])**2+ best_fit_2ndpoly_1[1]*(TWL1[i])+ best_fit_2ndpoly_1[2]))
 
