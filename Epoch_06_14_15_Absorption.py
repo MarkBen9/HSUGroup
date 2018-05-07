@@ -99,32 +99,36 @@ for i in range(find_index(Si_Spect_WL_4,closest_value(Si_Spect_WL_4,1469)),len(S
 #------------------------------------------------------------------------------
     #Carbon
 #------------------------------------------------------------------------------
-""" 
-PreNormalizedSI_FX=Epoch_06_1_14_FLUX[find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1600)):find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1680))]
-CIV_Spect_WL=arange(1600,1680,0.012234810431436927)
-
-CIV_Polyfit_Points=[make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1637.6,1637.9),
-                    make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1639.6,1640.1),
-                    make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1643.7,1643.9),
-                    make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1648,1649)]
-
-x_poly_1=[item[0]for item in CIV_Polyfit_Points]
-y_poly_1=[item[1]for item in CIV_Polyfit_Points]
-
-best_fit_poly_1=(polyfit(x_poly_1,y_poly_1,2))
-
-#for Graphical purposes, and plotting only, Has no coding
-xping=arange(Epoch_06_1_14_WAVE[0],Epoch_06_1_14_WAVE[-1],.05)
-yping=[]
-for i in range(len(xping)):
-   yping.append(best_fit_poly_1[0]*(xping[i])**2+ best_fit_poly_1[1]*(xping[i])+best_fit_poly_1[2])
-
-CIV_Spect_FX=[]
-CIV_Spect_WL=arange(1615,1650,0.012234810431436927)
-for i in range(0,find_index(CIV_Spect_WL,closest_value(CIV_Spect_WL,1636.23))):
+#Creating points for splines
+CIV_Polyfit_Points=[make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1601.4,1603.4),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1616.3,1616.7),
+                    #make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1622.4,1623.4),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1626.6,1627.3),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1633.4,1633.5),
+                    #make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_14_15_FLUX,1635.2,1635.4),
+                    #make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_14_15_FLUX,1638.1,1638.2),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1639.6,1640.1),
+                    #make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_14_15_FLUX,1640.9,1641.1),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1642.4,1642.5),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1643.7,1643.9),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1648.0,1649.0),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1650.0,1652.0),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1654.2,1656.2),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1661.4,1662.2),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1673.4,1674.2),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1679.2,1681.2)]
+#------------------------------------------------------------------------------
+x_poly_1_CIV=[item[0]for item in CIV_Polyfit_Points]
+y_poly_1_CIV=[item[1]for item in CIV_Polyfit_Points]
+#------------------------------------------------------------------------------
+#splinesInt is a function i.e. f(x_wavelength)
+splinesCIV=interp1d(x_poly_1_CIV,y_poly_1_CIV,kind = 'cubic', bounds_error = False)
+PreNormalizedCIV_FX=Epoch_06_14_15_FLUX[find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1605)):find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1675))]
+#------------------------------------------------------------------------------
+#Normalized
+CIV_Spect_ER_4=Epoch_06_14_15_ERROR[find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1605)):find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1675))]
+CIV_Spect_WL_4=arange(Epoch_06_14_15_WAVE[find_index(Epoch_06_14_15_WAVE,1605)],Epoch_06_14_15_WAVE[find_index(Epoch_06_14_15_WAVE,1675)],0.012234810431436927)
+CIV_Spect_FX_4=[]
+for i in range(0,len(CIV_Spect_WL_4)):
     #First part First order poly
-    CIV_Spect_FX.append(Epoch_06_1_14_FLUX[find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1615))+i])
-for i in range(find_index(CIV_Spect_WL,closest_value(CIV_Spect_WL,1636.23)),len(CIV_Spect_WL)):
-    #First part First order poly
-    CIV_Spect_FX.append((Epoch_06_1_14_FLUX[find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1615))+i])/(best_fit_poly_1[0]*(CIV_Spect_WL[i])**2+ best_fit_poly_1[1]*(CIV_Spect_WL[i])+best_fit_poly_1[2]))
-"""
+    CIV_Spect_FX_4.append(PreNormalizedCIV_FX[i]/splinesCIV(CIV_Spect_WL_4[i]))
