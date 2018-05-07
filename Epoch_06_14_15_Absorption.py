@@ -55,47 +55,28 @@ def closest_value(your_list,value):
     #SiIV SECTION
 #------------------------------------------------------------------------------
 #gonna try Spline method, remember for splines, include endpoints!!!
-Sil_Polyfit_Point1=[make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1470.6,1471.1),
+Sil_Polyfit_Point1=[make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1445,1447),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1452.9,1453.8),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1461,1462),
                     make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1474,1475),
                     make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1478.3,1480),
-                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1483,1484),
                     make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1486,1487),
-                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1488,1488.5)]
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1497,1499)]
+#------------------------------------------------------------------------------
+x_poly_SiIV=[item[0]for item in Sil_Polyfit_Point1]
+y_poly_SiIV=[item[1]for item in Sil_Polyfit_Point1]
+#------------------------------------------------------------------------------
+splinesSiIV=interp1d(x_poly_SiIV,y_poly_SiIV, kind = 'cubic', bounds_error = False)
+PreNormalizedSI_FX=Epoch_06_14_15_FLUX[find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1450)):find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1490))]
+#------------------------------------------------------------------------------
+#Splines method
+SiIV_Spect_FX_4=[]
+SiIV_Spect_ER_4=Epoch_06_14_15_ERROR[find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1450)):find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1490))]
+SiIV_Spect_WL_4=Epoch_06_14_15_WAVE[find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1450)):find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1490))]
 
-Sil_Polyfit_Point2=[make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1452.9,1453.8),
-                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1461,1462)
-                    ,make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1464.9,1465.2)]
-#------------------------------------------------------------------------------
-x_poly_1=[item[0]for item in Sil_Polyfit_Point1]
-y_poly_1=[item[1]for item in Sil_Polyfit_Point1]
-x_poly_2=[item[0]for item in Sil_Polyfit_Point2]
-y_poly_2=[item[1]for item in Sil_Polyfit_Point2]
-
-best_fit_poly_1=(polyfit(x_poly_1,y_poly_1,2))
-best_fit_poly_2=(polyfit(x_poly_2,y_poly_2,1))
-#------------------------------------------------------------------------------
-PreNormalizedSI_FX=Epoch_06_14_15_FLUX[find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1450)):1+find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1490))]
-Si_Spect_FX_4=[]
-Si_Spect_WL_4=arange(1450,1490,0.012234810431436927)
-#------------------------------------------------------------------------------
-#Poly method
-"""
-#for ploting example
-xping=arange(1450,1500,.05)
-yping=[]
-for i in range(len(xping)):
-   yping.append(best_fit_poly_1[0]*(xping[i])**2+best_fit_poly_1[1]*(xping[i])+ best_fit_poly_1[2])
-   #for ploting example
-yping2=[]
-for i in range(len(xping)):
-   yping2.append(best_fit_poly_2[0]*(xping[i])+best_fit_poly_2[1])
-"""
-for i in range(0,find_index(Si_Spect_WL_4,closest_value(Si_Spect_WL_4,1469))):
-    #First part First order poly
-    Si_Spect_FX_4.append(PreNormalizedSI_FX[i]/(best_fit_poly_2[0]*(Si_Spect_WL_4[i])+best_fit_poly_2[1]))
-for i in range(find_index(Si_Spect_WL_4,closest_value(Si_Spect_WL_4,1469)),len(Si_Spect_WL_4)):
+for i in range(0,len(SiIV_Spect_WL_4)):
     #Second part Second order poly
-    Si_Spect_FX_4.append((PreNormalizedSI_FX[i])/(best_fit_poly_1[0]*(Si_Spect_WL_4[i])**2+ best_fit_poly_1[1]*(Si_Spect_WL_4[i])+best_fit_poly_1[2]))
+    SiIV_Spect_FX_4.append((PreNormalizedSI_FX[i])/(splinesSiIV(SiIV_Spect_WL_4[i])))
 #------------------------------------------------------------------------------
     #Carbon
 #------------------------------------------------------------------------------

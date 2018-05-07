@@ -52,38 +52,31 @@ def find_index(your_list,your_value):
 def closest_value(your_list,value):
     return(your_list[find_index(your_list,value)])
 #------------------------------------------------------------------------------
-#Si
+#SiIV
 #------------------------------------------------------------------------------
-Sil_Polyfit_Point1=[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1470.6,1471.1),
+Sil_Polyfit_Point1=[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1445,1447),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1452.9,1453.8),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1461,1462),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1474,1475),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1478.3,1480),
-                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1483,1484),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1486,1487),
-                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1488,1488.5)]
-
-Sil_Polyfit_Point2=[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1452.9,1453.8),
-                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1461,1462)
-                    ,make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1464.9,1465.2)]
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1497,1499)]
 #------------------------------------------------------------------------------
-x_poly_1=[item[0]for item in Sil_Polyfit_Point1]
-y_poly_1=[item[1]for item in Sil_Polyfit_Point1]
-x_poly_2=[item[0]for item in Sil_Polyfit_Point2]
-y_poly_2=[item[1]for item in Sil_Polyfit_Point2]
-
-best_fit_poly_1=(polyfit(x_poly_1,y_poly_1,2))
-best_fit_poly_2=(polyfit(x_poly_2,y_poly_2,1))
+x_poly_SiIV=[item[0]for item in Sil_Polyfit_Point1]
+y_poly_SiIV=[item[1]for item in Sil_Polyfit_Point1]
 #------------------------------------------------------------------------------
+splinesSiIV=interp1d(x_poly_SiIV,y_poly_SiIV, kind = 'cubic', bounds_error = False)
 PreNormalizedSI_FX=Epoch_06_28_14_FLUX[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1450)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1490))]
-Si_Spect_FX_3=[]
-Si_Spect_WL_3=arange(1450,1490,0.012234810431436927)
+
 #------------------------------------------------------------------------------
 #Splines method
-for i in range(0,find_index(Si_Spect_WL_3,closest_value(Si_Spect_WL_3,1469.9))):
-    #First part First order poly
-    Si_Spect_FX_3.append(PreNormalizedSI_FX[i]/(best_fit_poly_2[0]*(Si_Spect_WL_3[i])+best_fit_poly_2[1]))
-for i in range(find_index(Si_Spect_WL_3,closest_value(Si_Spect_WL_3,1469.9)),len(Si_Spect_WL_3)):
+SiIV_Spect_FX_3=[]
+SiIV_Spect_ER_3=Epoch_06_28_14_ERROR[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1450)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1490))]
+SiIV_Spect_WL_3=Epoch_06_28_14_WAVE[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1450)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1490))]
+
+for i in range(0,len(SiIV_Spect_WL_3)):
     #Second part Second order poly
-    Si_Spect_FX_3.append((PreNormalizedSI_FX[i])/(best_fit_poly_1[0]*(Si_Spect_WL_3[i])**2+ best_fit_poly_1[1]*(Si_Spect_WL_3[i])+best_fit_poly_1[2]))
+    SiIV_Spect_FX_3.append((PreNormalizedSI_FX[i])/(splinesSiIV(SiIV_Spect_WL_3[i])))
 #------------------------------------------------------------------------------
     #Carbon
 #------------------------------------------------------------------------------
