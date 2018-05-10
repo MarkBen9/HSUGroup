@@ -113,3 +113,33 @@ CIV_Spect_FX_3=[]
 for i in range(0,len(CIV_Spect_WL_3)):
     #First part First order poly
     CIV_Spect_FX_3.append(PreNormalizedCIV_FX[i]/splinesCIV(CIV_Spect_WL_3[i]))
+#------------------------------------------------------------------------------
+        #NV
+#------------------------------------------------------------------------------
+NV_Polyfit_Points =[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1257,1258),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1265,1266),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1273,1274),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1277.5,1278),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1282,1283),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1286,1286.1),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1287.6,1287.8),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1289.5,1290),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1310.8,1311),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1327,1328)
+                    ]        
+#------------------------------------------------------------------------------
+x_poly_NV=[item[0]for item in NV_Polyfit_Points]
+y_poly_NV=[item[1]for item in NV_Polyfit_Points]
+#------------------------------------------------------------------------------
+#splinesInt is a function i.e. f(x_wavelength)
+splinesNV=interp1d(x_poly_NV,y_poly_NV,kind = 'cubic', bounds_error = False)
+PreNormalizedNV_FX=Epoch_06_28_14_FLUX[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1260)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1320))]
+#------------------------------------------------------------------------------
+#Normalized
+NV_Spect_ER_3=Epoch_06_28_14_ERROR[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1260)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1320))]
+NV_Spect_WL_3= Epoch_06_28_14_WAVE[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1260)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1320))]
+NV_Spect_FX_3=[]
+for i in range(0,len(NV_Spect_WL_3)):
+    #First part First order poly
+    NV_Spect_FX_3.append(PreNormalizedNV_FX[i]/splinesNV(NV_Spect_WL_3[i]))
+#------------------------------------------------------------------------------

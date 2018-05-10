@@ -86,10 +86,10 @@ CIV_Polyfit_Points=[make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1
                     #make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1622.4,1623.4),
                     make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1626.6,1627.3),
                     make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1633.4,1633.5),
-                    #make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_14_15_FLUX,1635.2,1635.4),
-                    #make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_14_15_FLUX,1638.1,1638.2),
+                    #make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1635.2,1635.4),
+                    #make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1638.1,1638.2),
                     make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1639.6,1640.1),
-                    #make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_14_15_FLUX,1640.9,1641.1),
+                    #make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1640.9,1641.1),
                     make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1642.4,1642.5),
                     make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1643.7,1643.9),
                     make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1648.0,1649.0),
@@ -113,3 +113,33 @@ CIV_Spect_FX_4=[]
 for i in range(0,len(CIV_Spect_WL_4)):
     #First part First order poly
     CIV_Spect_FX_4.append(PreNormalizedCIV_FX[i]/splinesCIV(CIV_Spect_WL_4[i]))
+#------------------------------------------------------------------------------
+        #NV
+#------------------------------------------------------------------------------
+NV_Polyfit_Points =[make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1257,1258),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1265,1266),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1273,1274),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1277.5,1278),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1282,1283),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1286,1286.1),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1287.6,1287.8),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1289.5,1290),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1310.8,1311),
+                    make_polyfit_point(Epoch_06_14_15_WAVE,Epoch_06_14_15_FLUX,1327,1328)
+                    ]        
+#------------------------------------------------------------------------------
+x_poly_NV=[item[0]for item in NV_Polyfit_Points]
+y_poly_NV=[item[1]for item in NV_Polyfit_Points]
+#------------------------------------------------------------------------------
+#splinesInt is a function i.e. f(x_wavelength)
+splinesNV=interp1d(x_poly_NV,y_poly_NV,kind = 'cubic', bounds_error = False)
+PreNormalizedNV_FX=Epoch_06_14_15_FLUX[find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1260)):find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1320))]
+#------------------------------------------------------------------------------
+#Normalized
+NV_Spect_ER_4=Epoch_06_14_15_ERROR[find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1260)):find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1320))]
+NV_Spect_WL_4= Epoch_06_14_15_WAVE[find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1260)):find_index(Epoch_06_14_15_WAVE,closest_value(Epoch_06_14_15_WAVE,1320))]
+NV_Spect_FX_4=[]
+for i in range(0,len(NV_Spect_WL_4)):
+    #First part First order poly
+    NV_Spect_FX_4.append(PreNormalizedNV_FX[i]/splinesNV(NV_Spect_WL_4[i]))
+#------------------------------------------------------------------------------
