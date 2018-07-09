@@ -1,21 +1,21 @@
+import os
 from pylab import * 
-from numpy import *
 from astropy.io import fits
 from PIL import Image
+from numpy import *
 from numpy import concatenate
 from numpy import interp
 from numpy import set_printoptions
 from numpy import arange 
 from numpy import nan
-import matplotlib.pyplot as plt
-import os
-import matplotlib.ticker as mtick
 from numpy import sqrt
 from numpy import ones
 from numpy import convolve
-import matplotlib.patches as mpatches
 from numpy import polyfit
 from numpy import polyval
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
+import matplotlib.patches as mpatches
 #------------------------------------------------------------------------------
 def badpix(list_name,xmin_indice,xmax_indice,replace_val):
     for i in range(xmin_indice,xmax_indice):
@@ -138,6 +138,8 @@ best_fit_poly_2=(polyfit(x_poly_2,y_poly_2,1))
 best_fit_poly_3=(polyfit(x_poly_3,y_poly_3,1))
 #------------------------------------------------------------------------------
 #Graphical Tool
+#Used to create a list of points that represent a normalization curves
+"""
 xping1=arange(TWL1[0],TWL1[-1],.05)
 yping1=[]
 for i in range(len(xping1)):
@@ -152,6 +154,7 @@ xping3=arange(TWL3[0],TWL3[-1],.05)
 yping3=[]
 for i in range(len(xping3)):
     yping3.append(best_fit_poly_3[0]*(xping3[i])+ best_fit_poly_3[1])
+"""
 #------------------------------------------------------------------------------
 #point selection for second Order polynomial
 Grating_1_2ndOrderPolyfit_Points=[  make_polyfit_point(TWL1,TFS1,1174.4,1175.4),
@@ -184,7 +187,7 @@ for i in range(0,find_index(TWL1,closest_value(TWL1,1164.43))):                #
     Normal_TFS1.append(TFS1[i]/(best_fit_poly_1[0]*(TWL1[i])+ best_fit_poly_1[1]))
 for i in range(find_index(TWL1,closest_value(TWL1,1164.43)),len(TWL1)):        #Second part, Second order poly
     Normal_TFS1.append(TFS1[i]/(best_fit_2ndpoly_1[0]*(TWL1[i])**2+ best_fit_2ndpoly_1[1]*(TWL1[i])+ best_fit_2ndpoly_1[2]))
- #For Grating 2
+#For Grating 2
 Normal_TFS2=[]
 for i in range(0,find_index(TWL2,closest_value(TWL2,1201.29))):                #First part, Second order polynomial
     Normal_TFS2.append(TFS2[i]/(best_fit_2ndpoly_2[0]*(TWL2[i])**2+ best_fit_2ndpoly_2[1]*(TWL2[i])+ best_fit_2ndpoly_2[2]))
@@ -222,7 +225,6 @@ TWL1_TWL2_TWL3= arange(TWL1[0],TWL3[-1],TWL_1_2_3_STEPSIZE)
 #------------------------------------------------------------------------------
 #Determination for region of grating to be cut (there has to be a better way...)
 CUT_GRATINGS=True
-
 if( CUT_GRATINGS):# Enter the wavelength of the areas you would like to cut off, or "None"(no quotes)
     TWL1_Start_Cut=None#Will cut off all values before this 
     TWL1_End_Cut=None #Will cut off all values after this 

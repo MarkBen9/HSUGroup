@@ -65,15 +65,14 @@ Data3 = fits.open("../Data/lcbx02030_x1dsum.fits")
 #Data Extraction
 #headNa  = DataN[0].header headNb  = DataN[1].header where N is an int; was removed to save space 
 #Headers are used to give more information and details about what is in the Fits files
-
 TbData1 = Data1[1].data
 Data1.close()
 TbData2 = Data2[1].data
 Data2.close()
 TbData3 = Data3[1].data
 Data3.close()
-
 #------------------------------------------------------------------------------
+#Extracting data into useable lists
 wavelength1=TbData1['wavelength']
 flux1=TbData1['flux']
 error1=TbData1['error']
@@ -86,6 +85,7 @@ wavelength3=TbData3['wavelength']
 flux3=TbData3['flux']
 error3=TbData3['error']
 #------------------------------------------------------------------------------
+#Concatenating data sets
 #1162.9A - 1479.5A
 TWL1=concatenate((wavelength1[1],wavelength1[0]),axis=0)
 TF1=concatenate((flux1[1],flux1[0]),axis=0)
@@ -98,10 +98,11 @@ ER2=concatenate((error2[1],error2[0]),axis=0)
 TWL3=concatenate((wavelength3[1],wavelength3[0]),axis=0)
 TF3=concatenate((flux3[1],flux3[0]),axis=0)
 ER3=concatenate((error3[1],error3[0]),axis=0)
-
-TWL1,TWL2=TWL2,TWL1 #SWAPPING VARIBLE NAMES SO IT MAKES SENSE
-TF1,TF2=TF2,TF1     #SWAPPING VARIBLE NAMES SO IT MAKES SENSE
-ER1,ER2=ER2,ER1     #SWAPPING VARIBLE NAMES SO IT MAKES SENSE
+#------------------------------------------------------------------------------
+#SWAPPING VARIBLE NAMES SO IT MAKES SENSE (Michael)
+TWL1,TWL2=TWL2,TWL1
+TF1,TF2=TF2,TF1
+ER1,ER2=ER2,ER1
 #------------------------------------------------------------------------------
 #Observing points of interest
 #Search for flat regious with no absorption and emision points for normalization
@@ -110,10 +111,11 @@ TFS1=smooth(TF1,20)
 TFS2=smooth(TF2,20)
 TFS3=smooth(TF3,20)
 #------------------------------------------------------------------------------
+# Begining of Normalization
+#------------------------------------------------------------------------------
+#Creating point selection for first order polynomial
 Grating_1_polyfitpoints=[make_polyfit_point(TWL1,TFS1,1119,1121),
                          make_polyfit_point(TWL1,TFS1,1160,1161)]
-                         #make_polyfit_point(TWL1,TFS1,1165,1175),
-                         #make_polyfit_point(TWL1,TFS1,1147,1152)]
 Grating_2_polyfitpoints=[make_polyfit_point(TWL2,TFS2,1178,1182),
                          make_polyfit_point(TWL2,TFS2,1350,1360),
                          make_polyfit_point(TWL2,TFS2,1395,1402),
@@ -123,8 +125,8 @@ Grating_3_polyfitpoints=[make_polyfit_point(TWL3,TFS3,1425,1460),
                          make_polyfit_point(TWL3,TFS3,1590,1605),
                          make_polyfit_point(TWL3,TFS3,1675,1720)]
 # For different epochs, input different ranges that represent the continuum. 
-#That should be it.
 #------------------------------------------------------------------------------
+#Creates first order polynomial
 x_poly_1=[item[0]for item in Grating_1_polyfitpoints]
 y_poly_1=[item[1]for item in Grating_1_polyfitpoints]
 x_poly_2=[item[0]for item in Grating_2_polyfitpoints]
@@ -134,9 +136,25 @@ y_poly_3=[item[1]for item in Grating_3_polyfitpoints]
 best_fit_poly_1=(polyfit(x_poly_1,y_poly_1,1))
 best_fit_poly_2=(polyfit(x_poly_2,y_poly_2,1))
 best_fit_poly_3=(polyfit(x_poly_3,y_poly_3,1))
-#poly_array_1=polyval(best_fit_poly_1, TWL1) #poly_array contains the polynomial EVALUATED by each x point in the grating.
-#poly_array_2=polyval(best_fit_poly_2, TWL2) #It is NOT used anywhere in the code but is useful if one wants to plot the slope.
-#poly_array_3=polyval(best_fit_poly_3, TWL3)
+#------------------------------------------------------------------------------
+#Graphical Tool
+#Used to create a list of points that represent a normalization curves
+"""
+xping1=arange(TWL1[0],TWL1[-1],.05)
+yping1=[]
+for i in range(len(xping1)):
+    yping1.append(best_fit_poly_1[0]*(xping1[i])+ best_fit_poly_1[1])
+
+xping2=arange(TWL2[0],TWL2[-1],.05)
+yping2=[]
+for i in range(len(xping2)):
+    yping2.append(best_fit_poly_2[0]*(xping2[i])+ best_fit_poly_2[1])
+
+xping3=arange(TWL3[0],TWL3[-1],.05)
+yping3=[]
+for i in range(len(xping3)):
+    yping3.append(best_fit_poly_3[0]*(xping3[i])+ best_fit_poly_3[1])
+"""
 #------------------------------------------------------------------------------
 #Second Order poly fit point selection
 Grating_1_2ndOrderPolyfit_Points=[  make_polyfit_point(TWL1,TFS1,1174.4,1175.4),
@@ -151,7 +169,7 @@ Grating_2_2ndOrderPolyfit_Points=[  make_polyfit_point(TWL2,TFS2,1174.4,1175.4),
                                     make_polyfit_point(TWL2,TFS2,1181.0,1182.0),
                                     make_polyfit_point(TWL2,TFS2,1204.0,1205.0)]
 #------------------------------------------------------------------------------
-#Second Order Polynomial fit built                                    
+#Creates Second Order Polynomial from seleted points
 x_2ndpoly_1=[item[0]for item in Grating_1_2ndOrderPolyfit_Points]
 y_2ndpoly_1=[item[1]for item in Grating_1_2ndOrderPolyfit_Points]
 x_2ndpoly_2=[item[0]for item in Grating_2_2ndOrderPolyfit_Points]
@@ -159,34 +177,35 @@ y_2ndpoly_2=[item[1]for item in Grating_2_2ndOrderPolyfit_Points]
 best_fit_2ndpoly_1=(polyfit(x_2ndpoly_1,y_2ndpoly_1,2))
 best_fit_2ndpoly_2=(polyfit(x_2ndpoly_2,y_2ndpoly_2,2))
 #------------------------------------------------------------------------------
-Normal_TFS1=[]#grating 1
-#Might need to brake this into two polyfits 
+#Normalizes for each Grating, Special care taken for Intersection of Grating 1 and 2
 #From mathmatica, the polynomial intersects around 1175.06 and 1201.29
-#Remember to change this every time
-for i in range(0,find_index(TWL1,closest_value(TWL1,1169.00))):
-    #First part First order poly
+#Remember to change this every time if point selection changes
+#------------------------------------------------------------------------------
+#For Grating 1
+Normal_TFS1=[]
+for i in range(0,find_index(TWL1,closest_value(TWL1,1169.00))):                #First part, First order poly
     Normal_TFS1.append(TFS1[i]/(best_fit_poly_1[0]*(TWL1[i])+ best_fit_poly_1[1]))
-for i in range(find_index(TWL1,closest_value(TWL1,1169.00)),len(TWL1)):
-    #Second part, Second order poly
+for i in range(find_index(TWL1,closest_value(TWL1,1169.00)),len(TWL1)):        #Second part, Second order poly
     Normal_TFS1.append(TFS1[i]/(best_fit_2ndpoly_1[0]*(TWL1[i])**2+ best_fit_2ndpoly_1[1]*(TWL1[i])+ best_fit_2ndpoly_1[2]))
-
-Normal_TFS2=[]#grating 2
-#Will have to brake this into two poly fits 5227
-for i in range(0,find_index(TWL2,closest_value(TWL2,1201.61))):
-    #First part is a second order polynomial
+#For Grating 2
+Normal_TFS2=[]
+for i in range(0,find_index(TWL2,closest_value(TWL2,1201.61))):                #First part, second order polynomial
     Normal_TFS2.append(TFS2[i]/(best_fit_2ndpoly_2[0]*(TWL2[i])**2+ best_fit_2ndpoly_2[1]*(TWL2[i])+ best_fit_2ndpoly_2[2]))
-for i in range(find_index(TWL2,closest_value(TWL2,1201.61)),len(TWL2)):
-    #Second part is a poly nomial
+for i in range(find_index(TWL2,closest_value(TWL2,1201.61)),len(TWL2)):        #Second part, First order polynomial
     Normal_TFS2.append(TFS2[i]/(best_fit_poly_2[0]*(TWL2[i])+ best_fit_poly_2[1]))
-
-Normal_TFS3=[]#grating 3
+#For Grating 3
+Normal_TFS3=[]
 for i in range(len(TWL3)):
     Normal_TFS3.append(TFS3[i]/(best_fit_poly_3[0]*(TWL3[i])+ best_fit_poly_3[1]))
 #------------------------------------------------------------------------------
+    #Begining of combining Gratings
+#------------------------------------------------------------------------------
+#all Flux below .02% of the normailzation line is equated to 0
 remove_small(Normal_TFS1,0.02)
 remove_small(Normal_TFS2,0.02)
 remove_small(Normal_TFS3,0.02)
-
+#------------------------------------------------------------------------------
+#Finding stepsizes for each Grating, then sets the combined spectrua to the largest stepsize of the two
 TWL1_STEPSIZE=TWL1[1]-TWL1[0]
 TWL2_STEPSIZE=TWL2[1]-TWL2[0]
 TWL3_STEPSIZE=TWL3[1]-TWL3[0]
@@ -203,7 +222,8 @@ else:
 
 TWL1_TWL2= arange(TWL1[0],TWL2[-1],TWL_1_2_STEPSIZE)
 TWL1_TWL2_TWL3= arange(TWL1[0],TWL3[-1],TWL_1_2_3_STEPSIZE)
-
+#------------------------------------------------------------------------------
+#Determination for region of grating to be cut (there has to be a better way...)
 CUT_GRATINGS=True
 if( CUT_GRATINGS):# Enter the wavelength of the areas you would like to cut off, or "None"(no quotes)
     TWL1_Start_Cut=None#Will cut off all values before this 
@@ -212,7 +232,8 @@ if( CUT_GRATINGS):# Enter the wavelength of the areas you would like to cut off,
     TWL2_End_Cut=1466.6   
     TWL3_Start_Cut=1390.9
     TWL3_End_Cut=None
-    
+#------------------------------------------------------------------------------
+#Selecting Index for usage when combining Gratings.
     if not TWL1_Start_Cut==None:TWL1_Start_Cut_index=find_index_from_value(TWL1,TWL1_Start_Cut)
     else:
         TWL1_Start_Cut_index=None
@@ -231,8 +252,8 @@ if( CUT_GRATINGS):# Enter the wavelength of the areas you would like to cut off,
     if not TWL3_End_Cut==None:  TWL3_End_Cut_index=find_index_from_value(TWL3,TWL3_End_Cut)
     else:
         TWL3_End_Cut_index=None
-    
-    
+#------------------------------------------------------------------------------
+#In this Region Michael is using If and else statements to determing at which points to cut
     if not TWL1_Start_Cut==None and not TWL1_End_Cut==None :
         for i in range(len(TWL1)):#This Loop removes the cut portion of the flux values you have set, not used in the code but it makes plotting the gratings not show the cut portion
             if  i<=TWL1_Start_Cut_index:
@@ -297,7 +318,7 @@ else:
     Ierror2=interp(TWL1_TWL2,TWL2,ER2,left=0,right=0)
     Iflux3=interp(TWL1_TWL2_TWL3,TWL3,Normal_TFS3,left=0,right=0)
     Ierror3=interp(TWL1_TWL2_TWL3,TWL3,ER3,left=0,right=0)
-
+#------------------------------------------------------------------------------
 Iflux1=interp(TWL1_TWL2,TWL1,Normal_TFS1,left=0,right=0)
 Ierror1=interp(TWL1_TWL2,TWL1,ER1,left=0,right=0)
 Iflux2=interp(TWL1_TWL2,TWL2,Normal_TFS2,left=0,right=0)
@@ -371,6 +392,7 @@ for i in range(0,len(TWL1_TWL2_TWL3)):
         spec=Iflux_1_2[i]
         spec2=Iflux3[i]
         Averaged_TFS1_TFS2_TFS3.append((weight*spec+weight2*spec2)/(weight+weight2))
+        
 Error_TFS1_TFS2_TFS3=[]
 for i in range(len(TWL1_TWL2)):
     if (Ierror_1_2[i]!=1 and Ierror3[i]==1).all():
@@ -381,7 +403,9 @@ for i in range(len(TWL1_TWL2)):
         Error_TFS1_TFS2_TFS3.append(1)            
     else:#if neither of the error values are one then take the weighted average of the error values.
         Error_TFS1_TFS2_TFS3.append(sqrt((Ierror_1_2[i])**2+(Ierror3[i])**2))  
-
+#------------------------------------------------------------------------------
+    #Name change for final normalized and combined data set
+#------------------------------------------------------------------------------
 Final_e_spectrum=Error_TFS1_TFS2_TFS3
 Final_x_spectrum=TWL1_TWL2_TWL3
 Final_y_spectrum=Averaged_TFS1_TFS2_TFS3
