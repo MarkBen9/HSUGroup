@@ -200,7 +200,7 @@ for i in range(len(TWL3)):
 #------------------------------------------------------------------------------
     #Begining of combining Gratings
 #------------------------------------------------------------------------------
-#all Flux below .02% of the normailzation line is equated to 0
+#all Flux below 2% of the normailzation line is equated to 0
 remove_small(Normal_TFS1,0.02)
 remove_small(Normal_TFS2,0.02)
 remove_small(Normal_TFS3,0.02)
@@ -253,7 +253,7 @@ if( CUT_GRATINGS):# Enter the wavelength of the areas you would like to cut off,
     else:
         TWL3_End_Cut_index=None
 #------------------------------------------------------------------------------
-#In this Region Michael is using If and else statements to determing at which points to cut
+#In this Region Michael is using If and else statements to determing where to cut, from given selection above
     if not TWL1_Start_Cut==None and not TWL1_End_Cut==None :
         for i in range(len(TWL1)):#This Loop removes the cut portion of the flux values you have set, not used in the code but it makes plotting the gratings not show the cut portion
             if  i<=TWL1_Start_Cut_index:
@@ -303,7 +303,8 @@ if( CUT_GRATINGS):# Enter the wavelength of the areas you would like to cut off,
         for i in range(TWL3_End_Cut_index,len(TWL3)):
                 Normal_TFS3[i]=0
                 ER3[i]=1
-    
+#------------------------------------------------------------------------------
+#Interpolation of flux and error
     Iflux1=interp(TWL1_TWL2,       TWL1[TWL1_Start_Cut_index:TWL1_End_Cut_index],Normal_TFS1[TWL1_Start_Cut_index:TWL1_End_Cut_index],left=0,right=0)
     Ierror1=interp(TWL1_TWL2,      TWL1[TWL1_Start_Cut_index:TWL1_End_Cut_index],ER1[TWL1_Start_Cut_index:TWL1_End_Cut_index],left=0,right=0)
     Iflux2=interp(TWL1_TWL2,       TWL2[TWL2_Start_Cut_index:TWL2_End_Cut_index],Normal_TFS2[TWL2_Start_Cut_index:TWL2_End_Cut_index],left=0,right=0)
@@ -318,18 +319,20 @@ else:
     Ierror2=interp(TWL1_TWL2,TWL2,ER2,left=0,right=0)
     Iflux3=interp(TWL1_TWL2_TWL3,TWL3,Normal_TFS3,left=0,right=0)
     Ierror3=interp(TWL1_TWL2_TWL3,TWL3,ER3,left=0,right=0)
-#------------------------------------------------------------------------------
+
 Iflux1=interp(TWL1_TWL2,TWL1,Normal_TFS1,left=0,right=0)
 Ierror1=interp(TWL1_TWL2,TWL1,ER1,left=0,right=0)
 Iflux2=interp(TWL1_TWL2,TWL2,Normal_TFS2,left=0,right=0)
 Ierror2=interp(TWL1_TWL2,TWL2,ER2,left=0,right=0)
 Iflux3=interp(TWL1_TWL2_TWL3,TWL3,Normal_TFS3,left=0,right=0)
 Ierror3=interp(TWL1_TWL2_TWL3,TWL3,ER3,left=0,right=0)
-
+#------------------------------------------------------------------------------
+#Remove Zero Error
 TME1=remove_zero_error(Ierror1)
 TME2=remove_zero_error(Ierror2)
 TME3=remove_zero_error(Ierror3)
-        
+#------------------------------------------------------------------------------
+#Reconstructing Continuum using data and error         
 Averaged_TFS1_TFS2=[]
 for i in range(0,len(TWL1_TWL2)):
     if (Iflux1[i]==0 and Iflux2[i]==0).all():
@@ -345,15 +348,15 @@ for i in range(0,len(TWL1_TWL2)):
             Averaged_TFS1_TFS2.append(Iflux1[i])
     elif(TME1[i]==1 and TME2[i]==1):
             Averaged_TFS1_TFS2.append(0.0)
-        
     else:      
             weight=(1/TME1[i])
             weight2=(1/TME2[i])
             spec=Iflux1[i]
             spec2=Iflux2[i]
-            Averaged_TFS1_TFS2.append((weight*spec+weight2*spec2)/(weight+weight2))  
-
-badpix(Averaged_TFS1_TFS2,32323,32550,0)
+            Averaged_TFS1_TFS2.append((weight*spec+weight2*spec2)/(weight+weight2))
+            
+#Wait why did we add this twice??
+badpix(Averaged_TFS1_TFS2,32323,32550,0) 
 Iflux_1_2=interp(TWL1_TWL2_TWL3,TWL1_TWL2,Averaged_TFS1_TFS2,left=0,right=0)
 
 Error_TFS1_TFS2=[]
