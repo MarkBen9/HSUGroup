@@ -17,6 +17,7 @@ import matplotlib.patches as mpatches
 from numpy import polyfit
 from numpy import polyval
 #------------------------------------------------------------------------------
+#Functions
 def badpix(list_name,xmin_indice,xmax_indice,replace_val):
     for i in range(xmin_indice,xmax_indice):
         list_name[i]=replace_val

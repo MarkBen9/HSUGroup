@@ -84,7 +84,7 @@ for i in range(0,len(SiIV_Spect_WL_3)):
     SiIV_Spect_FX_3.append((PreNormalizedSI_FX[i])/(splinesSiIV(SiIV_Spect_WL_3[i])))
 #------------------------------------------------------------------------------
 #To Create Fits files for SiIV
-    """
+"""
 col1=fits.Column(name='wavelength',format='D',array=SiIV_Spect_WL_3)
 col2=fits.Column(name='flux'      ,format='D',array=SiIV_Spect_FX_3)
 col3=fits.Column(name='error'     ,format='D',array=SiIV_Spect_ER_3)
@@ -130,13 +130,13 @@ for i in range(0,len(CIV_Spect_WL_3)):
     #First part First order poly
     CIV_Spect_FX_3.append(PreNormalizedCIV_FX[i]/splinesCIV(CIV_Spect_WL_3[i]))
 #------------------------------------------------------------------------------
-    """
-col1=fits.Column(name='wavelength',format='D',array=CIV_Spect_WL_1)
-col2=fits.Column(name='flux'      ,format='D',array=CIV_Spect_FX_1)
-col3=fits.Column(name='error'     ,format='D',array=CIV_Spect_ER_1)
+"""
+col1=fits.Column(name='wavelength',format='D',array=CIV_Spect_WL_3)
+col2=fits.Column(name='flux'      ,format='D',array=CIV_Spect_FX_3)
+col3=fits.Column(name='error'     ,format='D',array=CIV_Spect_ER_3)
 cols = fits.ColDefs([col1, col2, col3])
 tbhdu = fits.BinTableHDU.from_columns(cols)
-tbhdu.writeto('CIV_Epoch_06_01_14.fits')
+tbhdu.writeto('CIV_Epoch_06_28_14.fits')
 """
 #------------------------------------------------------------------------------
         #NV
@@ -169,7 +169,7 @@ for i in range(0,len(NV_Spect_WL_3)):
     NV_Spect_FX_3.append(PreNormalizedNV_FX[i]/splinesNV(NV_Spect_WL_3[i]))
 #------------------------------------------------------------------------------
 #Fits Files for NV Region
-    """
+"""
 col1=fits.Column(name='wavelength',format='D',array=NV_Spect_WL_3)
 col2=fits.Column(name='flux'      ,format='D',array=NV_Spect_FX_3)
 col3=fits.Column(name='error'     ,format='D',array=NV_Spect_ER_3)
