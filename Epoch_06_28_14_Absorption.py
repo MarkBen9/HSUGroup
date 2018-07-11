@@ -98,15 +98,15 @@ tbhdu.writeto('SiIV_Epoch_06_28_14.fits')
 #Creating points for splines
 CIV_Polyfit_Points=[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1601.4,1603.4),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1615.2,1616.2),
-                    #make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1622.4,1623.4),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1622.4,1623.4),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1626.6,1627.3),
-                    #make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1633.4,1633.5),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1633.4,1633.5),
                     #make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1635.2,1635.4),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1638.1,1638.2),
-                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1639.6,1640.1),
-                    #make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1640.9,1641.1),
-                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1642.4,1642.8),
-                    #make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1643.7,1643.9),
+                    #make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1639.6,1640.1),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1640.9,1641.1),
+                    #make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1642.4,1642.8),
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1643.7,1643.9),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1648.0,1649.0),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1650.0,1652.0),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1654.2,1656.2),
@@ -150,8 +150,7 @@ NV_Polyfit_Points =[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1287.6,1287.8),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1289.5,1290),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1310.8,1311),
-                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1327,1328)
-                    ]        
+                    make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1327,1328)]        
 #------------------------------------------------------------------------------
 x_poly_NV=[item[0]for item in NV_Polyfit_Points]
 y_poly_NV=[item[1]for item in NV_Polyfit_Points]
