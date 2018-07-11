@@ -97,10 +97,10 @@ tbhdu.writeto('SiIV_Epoch_06_12_14.fits')
 #------------------------------------------------------------------------------
 #Creating points for splines
 CIV_Polyfit_Points=[make_polyfit_point(Epoch_06_12_14_WAVE,Epoch_06_12_14_FLUX,1601.4,1603.4),
-                    make_polyfit_point(Epoch_06_12_14_WAVE,Epoch_06_12_14_FLUX,1614.6,1614.9),
+                    make_polyfit_point(Epoch_06_12_14_WAVE,Epoch_06_12_14_FLUX,1613.4,1613.8),
                     make_polyfit_point(Epoch_06_12_14_WAVE,Epoch_06_12_14_FLUX,1622.4,1623.4),
                     make_polyfit_point(Epoch_06_12_14_WAVE,Epoch_06_12_14_FLUX,1626.6,1627.3),
-                    #make_polyfit_point(Epoch_06_12_14_WAVE,Epoch_06_12_14_FLUX,1633.4,1633.5),
+                    make_polyfit_point(Epoch_06_12_14_WAVE,Epoch_06_12_14_FLUX,1633.4,1633.5),
                     make_polyfit_point(Epoch_06_12_14_WAVE,Epoch_06_12_14_FLUX,1635.2,1635.4),
                     #make_polyfit_point(Epoch_06_12_14_WAVE,Epoch_06_12_14_FLUX,1638.1,1638.2),
                     make_polyfit_point(Epoch_06_12_14_WAVE,Epoch_06_12_14_FLUX,1639.6,1640.1),

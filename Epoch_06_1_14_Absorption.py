@@ -100,7 +100,7 @@ tbhdu.writeto('SiIV_Epoch_06_01_14.fits')
 
 CIV_Polyfit_Points=[make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1601.4,1603.4),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1613.8,1614.3),
-                    make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1622.8,1623.8),
+                    make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1622.4,1623.4),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1626.6,1627.4),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1633.4,1633.5),
                     #make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1635.2,1635.4),
