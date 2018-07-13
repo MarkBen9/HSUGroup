@@ -162,6 +162,7 @@ NV_Polyfit_Points =[make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,125
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1286,1286.1),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1287.6,1287.8),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1289.5,1290),
+                    #make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1301.7,1301.85),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1310.8,1311),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1327,1328)]        
 #------------------------------------------------------------------------------
