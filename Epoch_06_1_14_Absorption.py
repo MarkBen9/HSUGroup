@@ -52,11 +52,22 @@ def closest_value(your_list,value):
 #------------------------------------------------------------------------------
 #PV SECTION
 #------------------------------------------------------------------------------
-
+PV_Spect_FX_1=  Epoch_06_1_14_FLUX[find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1140)):find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1200))]
+PV_Spect_ER_1= Epoch_06_1_14_ERROR[find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1140)):find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1200))]
+PV_Spect_WL_1=  Epoch_06_1_14_WAVE[find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1140)):find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1200))]
+#------------------------------------------------------------------------------
+#To Create Fits files for PV
+"""
+col1=fits.Column(name='wavelength',format='D',array=PV_Spect_WL_1)
+col2=fits.Column(name='flux'      ,format='D',array=PV_Spect_FX_1)
+col3=fits.Column(name='error'     ,format='D',array=PV_Spect_ER_1)
+cols = fits.ColDefs([col1, col2, col3])
+tbhdu = fits.BinTableHDU.from_columns(cols)
+tbhdu.writeto('PV_Epoch_06_01_14.fits')
+#"""
 #------------------------------------------------------------------------------
 #SiIV SECTION
-#------------------------------------------------------------------------------
-"""   
+#------------------------------------------------------------------------------   
 #Point selection
 Sil_Polyfit_Point1=[make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1445,1447),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1452.9,1453.8),
@@ -85,7 +96,7 @@ for i in range(0,len(SiIV_Spect_WL_1)):
     SiIV_Spect_FX_1.append((PreNormalizedSI_FX[i])/(splinesSiIV(SiIV_Spect_WL_1[i])))
 #------------------------------------------------------------------------------
 #To Create Fits files for SiIV
-
+"""
 col1=fits.Column(name='wavelength',format='D',array=SiIV_Spect_WL_1)
 col2=fits.Column(name='flux'      ,format='D',array=SiIV_Spect_FX_1)
 col3=fits.Column(name='error'     ,format='D',array=SiIV_Spect_ER_1)
@@ -116,11 +127,11 @@ CIV_Polyfit_Points=[make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,160
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1673.4,1674.2),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1679.2,1681.2)]
 #------------------------------------------------------------------------------
-x_poly_1_CIV=[item[0]for item in CIV_Polyfit_Points]
-y_poly_1_CIV=[item[1]for item in CIV_Polyfit_Points]
+x_poly_CIV=[item[0]for item in CIV_Polyfit_Points]
+y_poly_CIV=[item[1]for item in CIV_Polyfit_Points]
 #------------------------------------------------------------------------------
 #splinesInt is a function i.e. f(x_wavelength)
-splinesCIV=interp1d(x_poly_1_CIV,y_poly_1_CIV,kind = 'cubic', bounds_error = False)
+splinesCIV=interp1d(x_poly_CIV,y_poly_CIV,kind = 'cubic', bounds_error = False)
 PreNormalizedCIV_FX=Epoch_06_1_14_FLUX[find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1605)):find_index(Epoch_06_1_14_WAVE,closest_value(Epoch_06_1_14_WAVE,1675))]
 #------------------------------------------------------------------------------
 #Normalized
@@ -139,7 +150,7 @@ col3=fits.Column(name='error'     ,format='D',array=CIV_Spect_ER_1)
 cols = fits.ColDefs([col1, col2, col3])
 tbhdu = fits.BinTableHDU.from_columns(cols)
 tbhdu.writeto('CIV_Epoch_06_01_14.fits')
-
+#"""
 #------------------------------------------------------------------------------
         #NV
 #------------------------------------------------------------------------------
@@ -152,8 +163,7 @@ NV_Polyfit_Points =[make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,125
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1287.6,1287.8),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1289.5,1290),
                     make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1310.8,1311),
-                    make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1327,1328)
-                    ]        
+                    make_polyfit_point(Epoch_06_1_14_WAVE,Epoch_06_1_14_FLUX,1327,1328)]        
 #------------------------------------------------------------------------------
 x_poly_NV=[item[0]for item in NV_Polyfit_Points]
 y_poly_NV=[item[1]for item in NV_Polyfit_Points]
@@ -171,7 +181,7 @@ for i in range(0,len(NV_Spect_WL_1)):
     NV_Spect_FX_1.append(PreNormalizedNV_FX[i]/splinesNV(NV_Spect_WL_1[i]))
 #------------------------------------------------------------------------------
 #Fits Files for NV Region
-
+"""
 col1=fits.Column(name='wavelength',format='D',array=NV_Spect_WL_1)
 col2=fits.Column(name='flux'      ,format='D',array=NV_Spect_FX_1)
 col3=fits.Column(name='error'     ,format='D',array=NV_Spect_ER_1)

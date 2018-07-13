@@ -52,7 +52,19 @@ def closest_value(your_list,value):
 #------------------------------------------------------------------------------
 #PV SECTION
 #------------------------------------------------------------------------------
-
+PV_Spect_FX_3=  Epoch_06_28_14_FLUX[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1140)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1200))]
+PV_Spect_ER_3= Epoch_06_28_14_ERROR[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1140)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1200))]
+PV_Spect_WL_3=  Epoch_06_28_14_WAVE[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1140)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1200))]
+#------------------------------------------------------------------------------
+#To Create Fits files for PV
+"""
+col1=fits.Column(name='wavelength',format='D',array=PV_Spect_WL_3)
+col2=fits.Column(name='flux'      ,format='D',array=PV_Spect_FX_3)
+col3=fits.Column(name='error'     ,format='D',array=PV_Spect_ER_3)
+cols = fits.ColDefs([col1, col2, col3])
+tbhdu = fits.BinTableHDU.from_columns(cols)
+tbhdu.writeto('PV_Epoch_06_28_14.fits')
+#"""
 #------------------------------------------------------------------------------
 #SiIV SECTION
 #------------------------------------------------------------------------------
@@ -114,11 +126,11 @@ CIV_Polyfit_Points=[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1673.4,1674.2),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1679.2,1681.2)]
 #------------------------------------------------------------------------------
-x_poly_1_CIV=[item[0]for item in CIV_Polyfit_Points]
-y_poly_1_CIV=[item[1]for item in CIV_Polyfit_Points]
+x_poly_CIV=[item[0]for item in CIV_Polyfit_Points]
+y_poly_CIV=[item[1]for item in CIV_Polyfit_Points]
 #------------------------------------------------------------------------------
 #splinesInt is a function i.e. f(x_wavelength)
-splinesCIV=interp1d(x_poly_1_CIV,y_poly_1_CIV,kind = 'cubic', bounds_error = False)
+splinesCIV=interp1d(x_poly_CIV,y_poly_CIV,kind = 'cubic', bounds_error = False)
 PreNormalizedCIV_FX=Epoch_06_28_14_FLUX[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1605)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1675))]
 #------------------------------------------------------------------------------
 #Normalized
