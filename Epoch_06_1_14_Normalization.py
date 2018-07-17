@@ -103,14 +103,14 @@ ER3=concatenate((error3[1],error3[0]),axis=0)
 #SWAPPING VARIBLE NAMES SO IT MAKES SENSE (Michael)
 TWL1,TWL2=TWL2,TWL1 
 TF1,TF2=TF2,TF1     
-ER1,ER2=ER2,ER1     
+ER1,ER2=ER2,ER1    
 #------------------------------------------------------------------------------
 #Observing points of interest
 #Search for flat regious with no absorption and emision points for normalization
 badpix(TF2,5180,5405,0)
 TFS1=smooth(TF1,20)
 TFS2=smooth(TF2,20)
-TFS3=smooth(TF3,20)
+TFS3=smooth(TF3,20)  
 #------------------------------------------------------------------------------
 # Begining of Normalization
 #------------------------------------------------------------------------------
@@ -138,32 +138,15 @@ best_fit_poly_1=(polyfit(x_poly_1,y_poly_1,1))
 best_fit_poly_2=(polyfit(x_poly_2,y_poly_2,1))
 best_fit_poly_3=(polyfit(x_poly_3,y_poly_3,1))
 #------------------------------------------------------------------------------
-#Graphical Tool
-#Used to create a list of points that represent a normalization curves
-"""
-xping1=arange(TWL1[0],TWL1[-1],.05)
-yping1=[]
-for i in range(len(xping1)):
-    yping1.append(best_fit_poly_1[0]*(xping1[i])+ best_fit_poly_1[1])
-
-xping2=arange(TWL2[0],TWL2[-1],.05)
-yping2=[]
-for i in range(len(xping2)):
-    yping2.append(best_fit_poly_2[0]*(xping2[i])+ best_fit_poly_2[1])
-
-xping3=arange(TWL3[0],TWL3[-1],.05)
-yping3=[]
-for i in range(len(xping3)):
-    yping3.append(best_fit_poly_3[0]*(xping3[i])+ best_fit_poly_3[1])
-"""
-#------------------------------------------------------------------------------
 #point selection for second Order polynomial
-Grating_1_2ndOrderPolyfit_Points=[  make_polyfit_point(TWL1,TFS1,1174.4,1175.4),
+Grating_1_2ndOrderPolyfit_Points=[  make_polyfit_point(TWL1,TFS1,1171.4,1172.0),
+                                    make_polyfit_point(TWL1,TFS1,1174.4,1175.4),
                                     make_polyfit_point(TWL1,TFS1,1191.2,1192.4),
                                     make_polyfit_point(TWL1,TFS1,1194.3,1196.0),
                                     make_polyfit_point(TWL1,TFS1,1184.0,1186.0),
                                     make_polyfit_point(TWL1,TFS1,1181.0,1182.0)]
-Grating_2_2ndOrderPolyfit_Points=[  make_polyfit_point(TWL2,TFS2,1174.4,1175.4),
+Grating_2_2ndOrderPolyfit_Points=[  make_polyfit_point(TWL2,TFS2,1171.4,1172.0),
+                                    make_polyfit_point(TWL2,TFS2,1174.4,1175.4),
                                     make_polyfit_point(TWL2,TFS2,1191.2,1192.4),
                                     make_polyfit_point(TWL2,TFS2,1194.3,1196.0),
                                     make_polyfit_point(TWL2,TFS2,1184.0,1186.0),
@@ -178,21 +161,48 @@ y_2ndpoly_2=[item[1]for item in Grating_2_2ndOrderPolyfit_Points]
 best_fit_2ndpoly_1=(polyfit(x_2ndpoly_1,y_2ndpoly_1,2))
 best_fit_2ndpoly_2=(polyfit(x_2ndpoly_2,y_2ndpoly_2,2))
 #------------------------------------------------------------------------------
+#Graphical Tool
+#Used to create a list of points that represent a normalization curves
+"""
+xping1=arange(TWL1[0],TWL1[-1],.05)
+yping1=[]
+for i in range(len(xping1)):
+    yping1.append(best_fit_poly_1[0]*(xping1[i])+ best_fit_poly_1[1])
+xping2=arange(TWL2[0],TWL2[-1],.05)
+yping2=[]
+for i in range(len(xping2)):
+    yping2.append(best_fit_poly_2[0]*(xping2[i])+ best_fit_poly_2[1])
+xping3=arange(TWL3[0],TWL3[-1],.05)
+yping3=[]
+for i in range(len(xping3)):
+    yping3.append(best_fit_poly_3[0]*(xping3[i])+ best_fit_poly_3[1])
+#"""
+#------------------------------------------------------------------------------
+#Graphical tool for second order polynomial
+"""
+y2ping1=[]
+y2ping2=[]
+for i in range(len(xping1)):
+    y2ping1.append(best_fit_2ndpoly_1[0]*(xping1[i]**2)+ best_fit_2ndpoly_1[1]*(xping1[i])+best_fit_2ndpoly_1[2])
+for i in range(len(xping2)):
+    y2ping2.append(best_fit_2ndpoly_2[0]*(xping2[i]**2)+ best_fit_2ndpoly_2[1]*(xping2[i])+best_fit_2ndpoly_2[2])
+#"""
+#------------------------------------------------------------------------------
 #Normalizes for each Grating, Special care taken for Intersection of Grating 1 and 2
 #From mathmatica, the polynomial intersects around 1169.92 and 1201.37
 #Remember to change this every time if point selection changes
 #------------------------------------------------------------------------------
 #For Grating 1
 Normal_TFS1=[]
-for i in range(0,find_index(TWL1,closest_value(TWL1,1164.43))):                #First part, First order poly
+for i in range(0,find_index(TWL1,closest_value(TWL1,1165.1869864928474))):                #First part, First order poly
     Normal_TFS1.append(TFS1[i]/(best_fit_poly_1[0]*(TWL1[i])+ best_fit_poly_1[1]))
-for i in range(find_index(TWL1,closest_value(TWL1,1164.43)),len(TWL1)):        #Second part, Second order poly
+for i in range(find_index(TWL1,closest_value(TWL1,1165.1869864928474)),len(TWL1)):        #Second part, Second order poly
     Normal_TFS1.append(TFS1[i]/(best_fit_2ndpoly_1[0]*(TWL1[i])**2+ best_fit_2ndpoly_1[1]*(TWL1[i])+ best_fit_2ndpoly_1[2]))
 #For Grating 2
 Normal_TFS2=[]
-for i in range(0,find_index(TWL2,closest_value(TWL2,1201.29))):                #First part, Second order polynomial
+for i in range(0,find_index(TWL2,closest_value(TWL2,1201.260773298951))):                #First part, Second order polynomial
     Normal_TFS2.append(TFS2[i]/(best_fit_2ndpoly_2[0]*(TWL2[i])**2+ best_fit_2ndpoly_2[1]*(TWL2[i])+ best_fit_2ndpoly_2[2]))
-for i in range(find_index(TWL2,closest_value(TWL2,1201.29)),len(TWL2)):        #Second part, First order polynomial
+for i in range(find_index(TWL2,closest_value(TWL2,1201.260773298951)),len(TWL2)):        #Second part, First order polynomial
     Normal_TFS2.append(TFS2[i]/(best_fit_poly_2[0]*(TWL2[i])+ best_fit_poly_2[1]))
 #For Grating 3
 Normal_TFS3=[]
@@ -255,6 +265,8 @@ if( CUT_GRATINGS):# Enter the wavelength of the areas you would like to cut off,
         TWL3_End_Cut_index=None
 #------------------------------------------------------------------------------
 #In this Region Michael is using If and else statements to determing where to cut, from given selection above   
+#------------------------------------------------------------------------------
+#First Error
     if not TWL1_Start_Cut==None and not TWL1_End_Cut==None :
         for i in range(len(TWL1)):#This Loop removes the cut portion of the flux values you have set, not used in the code but it makes plotting the gratings not show the cut portion
             if  i<=TWL1_Start_Cut_index:
@@ -271,7 +283,6 @@ if( CUT_GRATINGS):# Enter the wavelength of the areas you would like to cut off,
         for i in range(TWL1_End_Cut_index,len(TWL1)):
                 Normal_TFS1[i]=0
                 ER1[i]=1
-                
     if not TWL2_Start_Cut==None and not TWL2_End_Cut==None :
         for i in range(len(TWL2)):#This Loop removes the cut portion of the flux values you have set, not used in the code but it makes plotting the gratings not show the cut portion
             if  i<=TWL2_Start_Cut_index:
@@ -354,9 +365,9 @@ for i in range(0,len(TWL1_TWL2)):
             weight2=(1/TME2[i])
             spec=Iflux1[i]
             spec2=Iflux2[i]
-            Averaged_TFS1_TFS2.append((weight*spec+weight2*spec2)/(weight+weight2))  
+            Averaged_TFS1_TFS2.append((weight*spec+weight2*spec2)/(weight+weight2))     
 
-#Wait why did we add this twice??
+#Wait why did we remove bad pixel twice??
 badpix(Averaged_TFS1_TFS2,32323,32550,0)
 Iflux_1_2=interp(TWL1_TWL2_TWL3,TWL1_TWL2,Averaged_TFS1_TFS2,left=0,right=0)
 
@@ -369,7 +380,7 @@ for i in range(len(TWL1_TWL2)):
     elif (Ierror1[i]==1 and Ierror2[i]==1).all():
         Error_TFS1_TFS2.append(1)            
     else:#if neither of the error values are one then take the weighted average of the error values.
-        Error_TFS1_TFS2.append(sqrt((Ierror1[i])**2+(Ierror2[i])**2))   
+        Error_TFS1_TFS2.append(sqrt((Ierror1[i])**2+(Ierror2[i])**2))       
 
 Ierror_1_2=interp(TWL1_TWL2_TWL3,TWL1_TWL2,Error_TFS1_TFS2,left=0,right=0)
 TME_1_2=remove_zero_error(Ierror_1_2)
@@ -389,7 +400,6 @@ for i in range(0,len(TWL1_TWL2_TWL3)):
             Averaged_TFS1_TFS2_TFS3.append(Iflux_1_2[i])
     elif(TME_1_2[i]==1 and TME3[i]==1):
             Averaged_TFS1_TFS2_TFS3.append(0.0)
-    
     else:
         weight=(1/TME_1_2[i])
         weight2=(1/TME3[i])
@@ -398,7 +408,7 @@ for i in range(0,len(TWL1_TWL2_TWL3)):
         Averaged_TFS1_TFS2_TFS3.append((weight*spec+weight2*spec2)/(weight+weight2))
 
 Error_TFS1_TFS2_TFS3=[]
-for i in range(len(TWL1_TWL2)):
+for i in range(len(TWL1_TWL2_TWL3)):
     if (Ierror_1_2[i]!=1 and Ierror3[i]==1).all():
         Error_TFS1_TFS2_TFS3.append(Ierror_1_2[i])
     elif (Ierror_1_2[i]==1 and Ierror3[i]!=1).all():
