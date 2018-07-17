@@ -57,9 +57,9 @@ def find_index_from_value(mylist, value):
 #------------------------------------------------------------------------------
 #Fits files Opening
 #File says that the date obs was 6/28/14 11:25:07
-Data1 = fits.open("../Data/lcbx03010_x1dsum.fits")
+Data2 = fits.open("../Data/lcbx03010_x1dsum.fits")
 #File says that the date obs was 6/28/14 11:57:22
-Data2 = fits.open("../Data/lcbx03020_x1dsum.fits")
+Data1 = fits.open("../Data/lcbx03020_x1dsum.fits")
 #File says that the date obs was 6/28/14 13:21:29
 Data3 = fits.open("../Data/lcbx03030_x1dsum.fits")
 #------------------------------------------------------------------------------
@@ -99,11 +99,6 @@ ER2=concatenate((error2[1],error2[0]),axis=0)
 TWL3=concatenate((wavelength3[1],wavelength3[0]),axis=0)
 TF3=concatenate((flux3[1],flux3[0]),axis=0)
 ER3=concatenate((error3[1],error3[0]),axis=0)
-#------------------------------------------------------------------------------
-#SWAPPING VARIBLE NAMES SO IT MAKES SENSE (Michael)
-TWL1,TWL2=TWL2,TWL1
-TF1,TF2=TF2,TF1
-ER1,ER2=ER2,ER1
 #------------------------------------------------------------------------------
 #Observing points of interest
 #Search for flat regious with no absorption and emision points for normalization
