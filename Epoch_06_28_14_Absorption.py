@@ -18,9 +18,8 @@ from numpy import convolve
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import matplotlib.patches as mpatches
-import matplotlib.pyplot as plt
 import matplotlib.style as style
-style.use('dark_background')
+#style.use('dark_background')
 #------------------------------------------------------------------------------
 #Initializing
 #------------------------------------------------------------------------------
@@ -90,7 +89,7 @@ plt.axis([1450,1490,.2,3])
 fig = plt.gcf()
 fig.set_size_inches(13.5, 10.5)
 #------------------------------------------------------------------------------
-#Point selection
+#From selected regions, generates a 2D list
 Sil_Polyfit_Point1=[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1445,1447),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1452.9,1453.8),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1461,1462),
@@ -99,7 +98,7 @@ Sil_Polyfit_Point1=[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1486,1487),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1497,1499)]
 #------------------------------------------------------------------------------
-#Points for Splines cubic
+#From 2D list, this provides two 1D lists
 x_poly_SiIV=[item[0]for item in Sil_Polyfit_Point1]
 y_poly_SiIV=[item[1]for item in Sil_Polyfit_Point1]
 #------------------------------------------------------------------------------
@@ -114,7 +113,7 @@ plt.axis([1450,1490,.2,3])
 fig = plt.gcf()
 fig.set_size_inches(13.5, 10.5)
 #------------------------------------------------------------------------------
-#Splines Function
+#Creates Splines Function for SiIV region
 splinesSiIV=interp1d(x_poly_SiIV,y_poly_SiIV, kind = 'cubic', bounds_error = False)
 PreNormalizedSI_FX=Epoch_06_28_14_FLUX[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1450)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1490))]
 #------------------------------------------------------------------------------
@@ -135,9 +134,8 @@ SiIV_Spect_FX_3=[]
 SiIV_Spect_ER_3=Epoch_06_28_14_ERROR[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1450)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1490))]
 SiIV_Spect_WL_3=Epoch_06_28_14_WAVE[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1450)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1490))]
 #------------------------------------------------------------------------------
-#Splines method
+#Normalization using Splines Method
 for i in range(0,len(SiIV_Spect_WL_3)):
-    #Second part Second order poly
     SiIV_Spect_FX_3.append((PreNormalizedSI_FX[i])/(splinesSiIV(SiIV_Spect_WL_3[i])))
 #------------------------------------------------------------------------------
 plt.figure(5)
@@ -172,7 +170,7 @@ plt.axis([1605,1675,.02,5])
 fig = plt.gcf()
 fig.set_size_inches(13.5, 10.5)
 #------------------------------------------------------------------------------
-#Creating points for splines
+#From selected regions, generates a 2D list
 CIV_Polyfit_Points=[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1601.4,1603.4),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1615.2,1616.2),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1622.4,1623.4),
@@ -191,6 +189,7 @@ CIV_Polyfit_Points=[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1673.4,1674.2),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1679.2,1681.2)]
 #------------------------------------------------------------------------------
+#From 2D list, this provides two 1D lists
 x_poly_CIV=[item[0]for item in CIV_Polyfit_Points]
 y_poly_CIV=[item[1]for item in CIV_Polyfit_Points]
 #------------------------------------------------------------------------------
@@ -205,7 +204,7 @@ plt.axis([1605,1675,.02,5])
 fig = plt.gcf()
 fig.set_size_inches(13.5, 10.5)
 #------------------------------------------------------------------------------
-#splinesInt is a function i.e. f(x_wavelength)
+#Creates Splines Function for CIV region
 splinesCIV=interp1d(x_poly_CIV,y_poly_CIV,kind = 'cubic', bounds_error = False)
 PreNormalizedCIV_FX=Epoch_06_28_14_FLUX[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1605)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1675))]
 #------------------------------------------------------------------------------
@@ -221,13 +220,13 @@ plt.axis([1605,1675,.02,5])
 fig = plt.gcf()
 fig.set_size_inches(13.5, 10.5)
 #------------------------------------------------------------------------------
-#Normalized
+#Creates list for CIV region.
 CIV_Spect_ER_3=Epoch_06_28_14_ERROR[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1605)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1675))]
 CIV_Spect_WL_3=arange(Epoch_06_28_14_WAVE[find_index(Epoch_06_28_14_WAVE,1605)],Epoch_06_28_14_WAVE[find_index(Epoch_06_28_14_WAVE,1675)],0.012234810431436927)
 CIV_Spect_FX_3=[]
-
+#------------------------------------------------------------------------------
+#Normalized using Splines Method
 for i in range(0,len(CIV_Spect_WL_3)):
-    #First part First order poly
     CIV_Spect_FX_3.append(PreNormalizedCIV_FX[i]/splinesCIV(CIV_Spect_WL_3[i]))
 #------------------------------------------------------------------------------
 plt.figure(9)
@@ -240,6 +239,7 @@ plt.axis([1605,1675,.02,1.3])
 fig = plt.gcf()
 fig.set_size_inches(13.5, 10.5)
 #------------------------------------------------------------------------------
+#Creates fits files which contains data for CIV Region
 """
 col1=fits.Column(name='wavelength',format='D',array=CIV_Spect_WL_3)
 col2=fits.Column(name='flux'      ,format='D',array=CIV_Spect_FX_3)
@@ -261,6 +261,7 @@ plt.axis([1260,1340,.02,15])
 fig = plt.gcf()
 fig.set_size_inches(13.5, 10.5)
 #------------------------------------------------------------------------------ 
+#From selected regions, generates a 2D list
 NV_Polyfit_Points =[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1257,1258),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1265,1266),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1273,1274),
@@ -276,6 +277,7 @@ NV_Polyfit_Points =[make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1347,1348),
                     make_polyfit_point(Epoch_06_28_14_WAVE,Epoch_06_28_14_FLUX,1360,1362)]        
 #------------------------------------------------------------------------------
+#From 2D list, this provides two 1D lists
 x_poly_NV=[item[0]for item in NV_Polyfit_Points]
 y_poly_NV=[item[1]for item in NV_Polyfit_Points]
 #------------------------------------------------------------------------------
@@ -290,7 +292,7 @@ plt.axis([1260,1340,.02,15])
 fig = plt.gcf()
 fig.set_size_inches(13.5, 10.5)
 #------------------------------------------------------------------------------
-#splinesInt is a function i.e. f(x_wavelength)
+#Creates Splines Function for NV region
 splinesNV=interp1d(x_poly_NV,y_poly_NV,kind = 'cubic', bounds_error = False)
 PreNormalizedNV_FX=Epoch_06_28_14_FLUX[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1260)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1340))]
 #------------------------------------------------------------------------------
@@ -306,11 +308,12 @@ plt.axis([1260,1340,.02,15])
 fig = plt.gcf()
 fig.set_size_inches(13.5, 10.5)
 #------------------------------------------------------------------------------
-#Normalized
+#Creates list for NV region.
 NV_Spect_ER_3=Epoch_06_28_14_ERROR[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1260)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1340))]
 NV_Spect_WL_3= Epoch_06_28_14_WAVE[find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1260)):find_index(Epoch_06_28_14_WAVE,closest_value(Epoch_06_28_14_WAVE,1340))]
 NV_Spect_FX_3=[]
-
+#------------------------------------------------------------------------------
+#Normalization using Splines Method
 for i in range(0,len(NV_Spect_WL_3)):
     #First part First order poly
     NV_Spect_FX_3.append(PreNormalizedNV_FX[i]/splinesNV(NV_Spect_WL_3[i]))
@@ -325,7 +328,7 @@ plt.axis([1260,1340,.02,1.3])
 fig = plt.gcf()
 fig.set_size_inches(13.5, 10.5)
 #------------------------------------------------------------------------------
-#Fits Files for NV Region
+#Creates fits files which contains data for NV Region
 """
 col1=fits.Column(name='wavelength',format='D',array=NV_Spect_WL_3)
 col2=fits.Column(name='flux'      ,format='D',array=NV_Spect_FX_3)
